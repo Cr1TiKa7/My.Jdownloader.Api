@@ -46,10 +46,12 @@ namespace My.JDownloader.Api.ApiHandler
             if (!string.IsNullOrWhiteSpace(param))
                 param = string.Empty;
             string response = PostMethod(url, param, key);
+            if (response == null)
+                return default(T);
             return (T)JsonConvert.DeserializeObject(response,typeof(T));
         }
 
-        public T CallAction<T>(DeviceObject device, string action, object param, LoginObject loginObject)
+        public T CallAction<T>(DeviceObject device, string action, object param, LoginObject loginObject, bool decryptResponse = false)
         {
             if (device == null)
                 throw new ArgumentNullException("The device can't be null.");
@@ -74,13 +76,18 @@ namespace My.JDownloader.Api.ApiHandler
 
             if (response == null || !response.Contains(callActionObject.RequestId.ToString()))
             {
+                if (decryptResponse)
+                {
+                    string tmp = Decrypt(response, loginObject.DeviceEncryptionToken);
+                    return (T)JsonConvert.DeserializeObject(tmp, typeof(T));
+                }
                 //TODO: Thorw an InvalidRequestIdException 
                 return default(T);
             }
             return (T)JsonConvert.DeserializeObject(response,typeof(T));
         }
 
-            private string PostMethod(string url, string body = "", byte[] ivKey = null)
+        private string PostMethod(string url, string body = "", byte[] ivKey = null)
         {
             using (var httpClient = new HttpClient())
             {
@@ -90,6 +97,7 @@ namespace My.JDownloader.Api.ApiHandler
                     var response = httpClient.PostAsync(url, content).Result;
                     if (response != null)
                     {
+                        
                         return response.Content.ReadAsStringAsync().Result;
                     }
                 }

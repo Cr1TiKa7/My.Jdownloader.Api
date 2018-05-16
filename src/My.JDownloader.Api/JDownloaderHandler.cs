@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using My.JDownloader.Api.ApiHandler;
+using My.JDownloader.Api.ApiObjects.Account;
 using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.Link;
+using My.JDownloader.Api.ApiObjects.LinkgrabberV2;
 using My.JDownloader.Api.ApiObjects.Login;
 using Newtonsoft.Json;
 
@@ -112,41 +112,148 @@ namespace My.JDownloader.Api
             return devices;
         }
 
+        #region "linkgrabberV2 calls"
         /// <summary>
         /// Adds a download link to the given device.
         /// </summary>
-        /// <param name="device">The device where the link gets added.</param>
-        /// <param name="link">The downloadlink.</param>
+        /// <param name="device">The target device</param>
+        /// <param name="links">The downloadlinks. Seperated by a space.</param>
         /// <param name="packageName">The name of the package.</param>
         /// <param name="priority">The priority of the download. Can be one of the following: HIGHEST, HIGHER, HIGH, DEFAULT, LOW, LOWER, LOWEST</param>
         /// <param name="downloadPassword">The password which may be needed for a download.</param>
         /// <param name="extractPassword">The password if the archive which will be downloaded is locked with.</param>
         /// <param name="autoStart">If true the download starts automatically.</param>
         /// <param name="autoExtract">If true it extracts the downloaded archive after finishing the download.</param>
-        public void AddLink(DeviceObject device, string link, string packageName, string destinationFolder, string priority = "DEFAULT", string extractPassword = "", string downloadPassword = "", bool autoStart = true, bool autoExtract = true)
+        public void AddLink(DeviceObject device, string links, string packageName, string destinationFolder, string priority = "DEFAULT", string extractPassword = "", string downloadPassword = "", bool autoStart = true, bool autoExtract = true)
         {
-            LinkObject linkObject = new LinkObject
+            AddLinkObject linkObject = new AddLinkObject
             {
-                 Priority = priority,
-                 Links = link,
-                 AutoStart = autoStart,
-                 PackageName = packageName,
-                 AutoExtract = autoExtract,
-                 DownloadPassword = downloadPassword,
-                 ExtractPassword = extractPassword,
-                 DestinationFolder = destinationFolder
+                Priority = priority,
+                Links = links.Replace(" ", "\\r\\n"),
+                AutoStart = autoStart,
+                PackageName = packageName,
+                AutoExtract = autoExtract,
+                DownloadPassword = downloadPassword,
+                ExtractPassword = extractPassword,
+                DestinationFolder = destinationFolder
             };
-            //dynamic linkObject = new ExpandoObject();
-            //linkObject.priority = "DEFAULT";
-            //linkObject.links = link;
-            //linkObject.autostart = true;
-            //linkObject.packageName = packageName;
             string json = JsonConvert.SerializeObject(linkObject);
-            var param = new[] {json};
-            var result = _HttpClientHandler.CallAction<object>(device, "/linkgrabberv2/addLinks",
+            var param = new[] { json };
+            var response = _HttpClientHandler.CallAction<object>(device, "/linkgrabberv2/addLinks",
                 param, _LoginObject);
         }
 
+        /// <summary>
+        /// Adds a container to the download list.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <param name="type">I don't know which types are possible.</param>
+        /// <param name="content">File as dataurl. https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs </param>
+        public void AddContainer(DeviceObject device, string type, string content)
+        {
+            AddContainerObject containerObject = new AddContainerObject
+            {
+                Type = type,
+                Content = content
+            };
+
+            string json = JsonConvert.SerializeObject(containerObject);
+            var param = new[] { json };
+            var response = _HttpClientHandler.CallAction<object>(device, "/linkgrabberv2/addContainer",
+                param, _LoginObject);
+        }
+
+        /// <summary>
+        /// Clears the linkcollector list.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <returns>True if successfull</returns>
+        public bool ClearList(DeviceObject device)
+        {
+            var response =
+                _HttpClientHandler.CallAction<object>(device, "/linkgrabberv2/clearList", null, _LoginObject);
+            if (response == null)
+                return false;
+            return true;
+
+        }
+
+        /// <summary>
+        /// Checks how many packages are inside the linkcollector.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <returns>The amount of links which are in the linkcollector.</returns>
+        public int GetPackageCount(DeviceObject device)
+        {
+            var response =
+                _HttpClientHandler.CallAction<dynamic>(device, "/linkgrabberv2/getPackageCount", null, _LoginObject, true);
+            if (response == null)
+                return 0;
+            return response.data;
+        }
+
+        /// <summary>
+        /// Checks if the JDownloader client is still collecting files from links.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <returns>Returns true or false. Depending on if the client is still collecting files.</returns>
+        public bool IsCollecting(DeviceObject device)
+        {
+            var response =
+                _HttpClientHandler.CallAction<object>(device, "/linkgrabberv2/isCollection", null, _LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        public List<CrawledLinkDataObject> QueryLinks(DeviceObject device, int maxResults = -1)
+        {
+            QueryLinksObject queryLink = new QueryLinksObject
+            {
+                Availability = true,
+                Url = true
+            };
+            if (maxResults > 0)
+                queryLink.MaxResults = maxResults;
+
+            string json = JsonConvert.SerializeObject(queryLink);
+            var param = new[] { json };
+
+            var response =
+                _HttpClientHandler.CallAction<CrawledLinkObject>(device, "/linkgrabberv2/queryLinks", param, _LoginObject,true);
+            if (response == null)
+                return null;
+            return response.Data;
+        }
+        #endregion
+
+        #region "accountsV2 calls"
+        /// <summary>
+        /// CURRENTLY NOT WORKING! Adds an premium account to your JDownloader device.
+        /// </summary>
+        /// <param name="device">The device where the account will be added</param>
+        /// <param name="hoster">The hoster e.g. mega.co.nz</param>
+        /// <param name="username">Your username</param>
+        /// <param name="password">Your password</param>
+        /// <returns>True if the account was successfully added.</returns>
+        public bool AddAccount(DeviceObject device, string hoster, string username, string password)
+        {
+            AddAccountObject accObject = new AddAccountObject
+            {
+                PremiumHoster=hoster,
+                Username = username,
+                Password = password
+            };
+            string json = JsonConvert.SerializeObject(accObject);
+            var param = new[] { json };
+            var response = _HttpClientHandler.CallAction<object>(device, "/accountsV2/addAccount",
+                param, _LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        #endregion
         #region "Start and stop download process"
 
         public void StartDownload(DeviceObject device)

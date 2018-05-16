@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace My.JDownloader.Api.ApiObjects.Link
+namespace My.JDownloader.Api.ApiObjects.LinkgrabberV2
 {
-    public class LinkObject
+    public class AddLinkObject
     {
         [JsonProperty(PropertyName ="autostart")]
         public bool AutoStart { get; set; }
@@ -20,6 +20,5 @@ namespace My.JDownloader.Api.ApiObjects.Link
         public string DownloadPassword { get; set; }
         [JsonProperty(PropertyName = "extractPassword")]
         public string ExtractPassword { get; set; }
-
     }
 }
