@@ -9,6 +9,12 @@
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
+    <Version>1.0.1</Version>
+    <PackageReleaseNotes>ADDED: AddContainer call
+ADDED: QueryLinks call
+ADDED: ClearList call
+ADDED: IsCollecting call
+ADDED: AddAccount call NOT WORKING</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

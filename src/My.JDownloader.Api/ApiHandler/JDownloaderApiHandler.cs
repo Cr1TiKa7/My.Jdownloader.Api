@@ -10,6 +10,7 @@ using System.Web;
 using My.JDownloader.Api.ApiObjects.Action;
 using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.Login;
+using My.JDownloader.Api.Exceptions;
 using Newtonsoft.Json;
 
 namespace My.JDownloader.Api.ApiHandler
@@ -81,8 +82,7 @@ namespace My.JDownloader.Api.ApiHandler
                     string tmp = Decrypt(response, loginObject.DeviceEncryptionToken);
                     return (T)JsonConvert.DeserializeObject(tmp, typeof(T));
                 }
-                //TODO: Thorw an InvalidRequestIdException 
-                return default(T);
+                throw new InvalidRequestIdException("The 'RequestId' differs from the 'Requestid' from the query.");
             }
             return (T)JsonConvert.DeserializeObject(response,typeof(T));
         }
@@ -94,52 +94,30 @@ namespace My.JDownloader.Api.ApiHandler
                 if (!string.IsNullOrEmpty(body))
                 {
                     StringContent content = new StringContent(body, Encoding.UTF8, "application/aesjson-jd");
-                    var response = httpClient.PostAsync(url, content).Result;
-                    if (response != null)
+                    using (var response = httpClient.PostAsync(url, content).Result)
                     {
-                        
-                        return response.Content.ReadAsStringAsync().Result;
+                        if (response != null)
+                        {
+                            return response.Content.ReadAsStringAsync().Result;
+                        }
                     }
                 }
                 else
                 {
-                    var response = httpClient.GetAsync(url).Result;
-                    if (response.StatusCode != HttpStatusCode.OK)
-                        return null;
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    if (ivKey != null)
+                    using (var response = httpClient.GetAsync(url).Result)
                     {
-                        result = Decrypt(result, ivKey);
+                        if (response.StatusCode != HttpStatusCode.OK)
+                            return null;
+                        string result = response.Content.ReadAsStringAsync().Result;
+                        if (ivKey != null)
+                        {
+                            result = Decrypt(result, ivKey);
+                        }
+                        return result;
                     }
-                    return result;
                 }
             }
             return null;
-        }
-        /// <summary>
-        /// Sends a GET method to the JDownloader API.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="url"></param>
-        /// <param name="headers"></param>
-        /// <param name="body"></param>
-        /// <returns></returns>
-        public T GetMethod<T>(string url, Dictionary<string, string> headers)
-        {
-            using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
-            {
-                using (HttpResponseMessage response = httpClient.GetAsync(url).Result)
-                {
-                    string strRet = response.Content.ReadAsStringAsync().Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return JsonConvert.DeserializeObject<T>(strRet);
-                    }
-
-                    return default(T);
-                }
-
-            }
         }
 
         #region "Encrypt, Decrypt and Signature"
@@ -154,8 +132,8 @@ namespace My.JDownloader.Api.ApiHandler
             var hmacsha256 = new HMACSHA256(key);
             hmacsha256.ComputeHash(dataBytes);
             var hash = hmacsha256.Hash;
-            string sbinary = hash.Aggregate("", (current, t) => current + t.ToString("X2"));
-            return sbinary.ToLower();
+            string binaryString = hash.Aggregate("", (current, t) => current + t.ToString("X2"));
+            return binaryString.ToLower();
         }
 
         private string Encrypt(string data, byte[] ivKey)
