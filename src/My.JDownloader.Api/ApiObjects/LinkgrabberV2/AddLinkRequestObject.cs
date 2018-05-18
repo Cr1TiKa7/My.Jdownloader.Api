@@ -2,7 +2,7 @@
 
 namespace My.JDownloader.Api.ApiObjects.LinkgrabberV2
 {
-    public class AddLinkObject
+    public class AddLinkRequestObject
     {
         [JsonProperty(PropertyName ="autostart")]
         public bool AutoStart { get; set; }

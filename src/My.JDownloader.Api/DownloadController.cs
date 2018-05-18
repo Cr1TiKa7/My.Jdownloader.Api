@@ -39,5 +39,33 @@ namespace My.JDownloader.Api
             return false;
         }
 
+        /// <summary>
+        /// Pauses all downloads.
+        /// </summary>
+        /// <param name="device">The target device.</param>
+        /// <param name="pause">True if you want to pause the download</param>
+        /// <returns>True if successfull.</returns>
+        public bool Pause(DeviceObject device,bool pause)
+        {
+            var param = new[] {pause};
+            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/pause", param, JDownloaderHandler.LoginObject, true);
+            if (result != null)
+                return (bool)result.Data;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the current state of the device
+        /// </summary>
+        /// <param name="device">The Target device.</param>
+        /// <returns>The current state of the device.</returns>
+        public string GetCurrentState(DeviceObject device)
+        {
+            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/getCurrentState", null, JDownloaderHandler.LoginObject, true);
+            if (result != null)
+                return (string)result.Data;
+            return "UNKOWN_STATE";
+        }
+
     }
 }

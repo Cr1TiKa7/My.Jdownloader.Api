@@ -27,20 +27,10 @@ namespace My.JDownloader.Api
         /// <param name="extractPassword">The password if the archive which will be downloaded is locked with.</param>
         /// <param name="autoStart">If true the download starts automatically.</param>
         /// <param name="autoExtract">If true it extracts the downloaded archive after finishing the download.</param>
-        public bool AddLinks(DeviceObject device, string links, string packageName, string destinationFolder, string priority = "DEFAULT", string extractPassword = "", string downloadPassword = "", bool autoStart = true, bool autoExtract = true)
+        public bool AddLinks(DeviceObject device, AddLinkRequestObject requestObject)
         {
-            AddLinkObject linkObject = new AddLinkObject
-            {
-                Priority = priority,
-                Links = links.Replace(" ", "\\r\\n"),
-                AutoStart = autoStart,
-                PackageName = packageName,
-                AutoExtract = autoExtract,
-                DownloadPassword = downloadPassword,
-                ExtractPassword = extractPassword,
-                DestinationFolder = destinationFolder
-            };
-            string json = JsonConvert.SerializeObject(linkObject);
+            requestObject.Links.Replace(";", "\\r\\n");
+            string json = JsonConvert.SerializeObject(requestObject);
             var param = new[] { json };
             var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/linkgrabberv2/addLinks",
                 param, JDownloaderHandler.LoginObject,true);
@@ -53,7 +43,7 @@ namespace My.JDownloader.Api
         /// <param name="device">The target device</param>
         /// <param name="type">The value can be: DLC, RSDF, CCF or CRAWLJOB</param>
         /// <param name="content">File as dataurl. https://de.wikipedia.org/wiki/Data-URL </param>
-        public void AddContainer(DeviceObject device, ContainerType type, string content)
+        public bool AddContainer(DeviceObject device, ContainerType type, string content)
         {
             AddContainerObject containerObject = new AddContainerObject
             {
@@ -65,6 +55,7 @@ namespace My.JDownloader.Api
             var param = new[] { json };
             var response = _ApiHandler.CallAction<object>(device, "/linkgrabberv2/addContainer",
                 param, JDownloaderHandler.LoginObject);
+            return response != null;
         }
 
         /// <summary>
@@ -109,6 +100,12 @@ namespace My.JDownloader.Api
             return true;
         }
 
+        /// <summary>
+        /// Gets all links that are currently in the linkcollector list.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <param name="maxResults">Maximum number of return values.</param>
+        /// <returns>Returns a list of all links that are currently in the linkcollector list.</returns>
         public List<CrawledLinkDataObject> QueryLinks(DeviceObject device, int maxResults = -1)
         {
             QueryLinksObject queryLink = new QueryLinksObject

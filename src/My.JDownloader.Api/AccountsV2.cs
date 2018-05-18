@@ -23,12 +23,12 @@ namespace My.JDownloader.Api
         /// </summary>
         /// <param name="device">The target device.</param>
         /// <param name="hoster">The hoster e.g. mega.co.nz</param>
-        /// <param name="username">Your username</param>
+        /// <param name="email">Your email</param>
         /// <param name="password">Your password</param>
         /// <returns>True if the account was successfully added.</returns>
-        public bool AddAccount(DeviceObject device, string hoster, string username, string password)
+        public bool AddAccount(DeviceObject device, string hoster, string email, string password)
         {
-            var param = new[] { hoster,username,password };
+            var param = new[] { hoster, email, password };
             var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/addAccount",
                 param, JDownloaderHandler.LoginObject, true);
 
@@ -66,21 +66,6 @@ namespace My.JDownloader.Api
         }
 
         /// <summary>
-        /// Removes accounts stored on the device.
-        /// </summary>
-        /// <param name="device">The target device.</param>
-        /// <param name="accountIds">The account ids you want to remove.</param>
-        /// <returns>True if successfull.</returns>
-        public bool RemoveAccounts(DeviceObject device, long[] accountIds)
-        {
-            var param = new[] { accountIds };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/removeAccounts",
-                param, JDownloaderHandler.LoginObject, true);
-
-            return response != null;
-        }
-
-        /// <summary>
         /// Lists all accounts which are stored on the device.
         /// </summary>
         /// <param name="device">The target device.</param>
@@ -96,5 +81,69 @@ namespace My.JDownloader.Api
 
             return tmp.ToObject<ListAccountResponseObject[]>();
         }
+
+        /// <summary>
+        /// Gets all premium hoster names + urls that JDownloader supports.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
+        public Dictionary<string,string> ListPremiumHosterUrls(DeviceObject device)
+        {
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/listPremiumHosterUrls", null,
+                JDownloaderHandler.LoginObject, true);
+            var tmp = ((JObject)response.Data);
+            if (tmp != null)
+                return tmp.ToObject<Dictionary<string, string>>();
+
+            return new Dictionary<string, string>();
+        }
+
+        /// <summary>
+        /// Refreshes all the account informations stored on the device.
+        /// </summary>
+        /// <param name="device">The target device.</param>
+        /// <param name="accountIds">The account ids you want to refresh.</param>
+        /// <returns>True if successfull</returns>
+        public bool RefreshAccounts(DeviceObject device, long[] accountIds)
+        {
+            var param = new[] { accountIds };
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/refreshAccounts",
+                param, JDownloaderHandler.LoginObject, true);
+
+            return response != null;
+        }
+
+        /// <summary>
+        /// Removes accounts stored on the device.
+        /// </summary>
+        /// <param name="device">The target device.</param>
+        /// <param name="accountIds">The account ids you want to remove.</param>
+        /// <returns>True if successfull.</returns>
+        public bool RemoveAccounts(DeviceObject device, long[] accountIds)
+        {
+            var param = new[] { accountIds };
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/removeAccounts",
+                param, JDownloaderHandler.LoginObject, true);
+
+            return response != null;
+        }
+
+        /// <summary>
+        /// Updates the account data for the given account id.
+        /// </summary>
+        /// <param name="device">The target device.</param>
+        /// <param name="accountId">The id of the account you want to update.</param>
+        /// <param name="email">The old/new email.</param>
+        /// <param name="password">The old/new password</param>
+        /// <returns>Ture if successfull</returns>
+        public bool SetUsernameAndPassword(DeviceObject device, long accountId, string email, string password)
+        {
+            var param = new[] {accountId.ToString(), email, password};
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/accountsV2/setUserNameAndPassword",
+                param, JDownloaderHandler.LoginObject, true);
+
+            return response != null;
+        }
+
     }
 }
