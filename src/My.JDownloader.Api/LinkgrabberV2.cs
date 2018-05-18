@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using My.JDownloader.Api.ApiHandler;
+using My.JDownloader.Api.ApiObjects;
 using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.LinkgrabberV2;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace My.JDownloader.Api
         /// <param name="extractPassword">The password if the archive which will be downloaded is locked with.</param>
         /// <param name="autoStart">If true the download starts automatically.</param>
         /// <param name="autoExtract">If true it extracts the downloaded archive after finishing the download.</param>
-        public void AddLinks(DeviceObject device, string links, string packageName, string destinationFolder, string priority = "DEFAULT", string extractPassword = "", string downloadPassword = "", bool autoStart = true, bool autoExtract = true)
+        public bool AddLinks(DeviceObject device, string links, string packageName, string destinationFolder, string priority = "DEFAULT", string extractPassword = "", string downloadPassword = "", bool autoStart = true, bool autoExtract = true)
         {
             AddLinkObject linkObject = new AddLinkObject
             {
@@ -41,8 +42,9 @@ namespace My.JDownloader.Api
             };
             string json = JsonConvert.SerializeObject(linkObject);
             var param = new[] { json };
-            var response = _ApiHandler.CallAction<object>(device, "/linkgrabberv2/addLinks",
-                param, JDownloaderHandler.LoginObject);
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/linkgrabberv2/addLinks",
+                param, JDownloaderHandler.LoginObject,true);
+            return response != null;
         }
 
         /// <summary>

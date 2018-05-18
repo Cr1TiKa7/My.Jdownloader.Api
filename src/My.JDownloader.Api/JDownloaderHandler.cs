@@ -24,8 +24,9 @@ namespace My.JDownloader.Api
         
         private readonly JDownloaderApiHandler _ApiHandler = new JDownloaderApiHandler();
 
-        public LinkgrabberV2 LinkgrabberV2;
         public AccountsV2 AccountsV2;
+        public DownloadController DownloadController;
+        public LinkgrabberV2 LinkgrabberV2;
 
         public JDownloaderHandler()
         {
@@ -42,6 +43,7 @@ namespace My.JDownloader.Api
         {
             LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
             AccountsV2 = new AccountsV2(_ApiHandler);
+            DownloadController = new DownloadController(_ApiHandler);
         }
 
         #region "Connection methods"
