@@ -1,6 +1,6 @@
 ﻿namespace My.JDownloader.Api.ApiObjects.LinkgrabberV2
 {
-    public class CrawledLinkDataObject
+    public class QueryLinksResponseObject
     {
         public AvailableLinkStateType AvailableLinkState { get; set; }
         public long BytesTotal { get; set; }

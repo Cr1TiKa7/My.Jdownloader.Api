@@ -14,6 +14,46 @@ namespace My.JDownloader.Api
         }
 
         /// <summary>
+        /// Forces JDownloader to start downloading the given links/packages
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <param name="linkIds">The ids of the links you want to force download.</param>
+        /// <param name="packageIds">The ids of the packages you want to force download.</param>
+        /// <returns>True if successfull</returns>
+        public bool ForceDownload(DeviceObject device, long[] linkIds, long[] packageIds)
+        {
+            var param = new[] {linkIds, packageIds};
+            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/forceDownload", param, JDownloaderHandler.LoginObject, true);
+            return result != null;
+        }
+
+        /// <summary>
+        /// Gets the current state of the device
+        /// </summary>
+        /// <param name="device">The Target device.</param>
+        /// <returns>The current state of the device.</returns>
+        public string GetCurrentState(DeviceObject device)
+        {
+            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/getCurrentState", null, JDownloaderHandler.LoginObject, true);
+            if (result != null)
+                return (string)result.Data;
+            return "UNKOWN_STATE";
+        }
+
+        /// <summary>
+        /// Gets the actual download speed of the client.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <returns>The actual download speed.</returns>
+        public long GetSpeedInBps(DeviceObject device)
+        {
+            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/getSpeedInBps", null, JDownloaderHandler.LoginObject, true);
+            if (result != null)
+                return (long)result.Data;
+            return 0;
+        }
+
+        /// <summary>
         /// Starts all downloads.
         /// </summary>
         /// <param name="device">The target device.</param>
@@ -54,18 +94,6 @@ namespace My.JDownloader.Api
             return false;
         }
 
-        /// <summary>
-        /// Gets the current state of the device
-        /// </summary>
-        /// <param name="device">The Target device.</param>
-        /// <returns>The current state of the device.</returns>
-        public string GetCurrentState(DeviceObject device)
-        {
-            var result = _ApiHandler.CallAction<DefaultReturnObject>(device, "/downloadcontroller/getCurrentState", null, JDownloaderHandler.LoginObject, true);
-            if (result != null)
-                return (string)result.Data;
-            return "UNKOWN_STATE";
-        }
 
     }
 }

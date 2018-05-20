@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworks>net40;net46;net45;netcoreapp20</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Cr1TiKa7</Authors>
     <Product />
@@ -9,12 +9,10 @@
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>1.1.1</Version>
-    <PackageReleaseNotes>ADDED: RefreshAccounts call (AccountsV2)
-ADDED: ListPremiumHosterUrls call (AccountsV2)
-ADDED: ListAccounts call (AccountsV2)
-ADDED: Pause call (DownloadController)
-ADDED: GetCurrentState (DownloadController)</PackageReleaseNotes>
+    <Version>1.2.0</Version>
+    <PackageReleaseNotes>Completed the AccountsV2 namespace:
+Completed the DownloadController namespace:</PackageReleaseNotes>
+    <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

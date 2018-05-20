@@ -8,9 +8,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "My.JDownloader.Api", "My.JDownloader.Api\My.JDownloader.Api.csproj", "{2EA0DF5A-DE23-48FF-808A-C9FCF51E0897}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D4705BE-EBC0-4D3C-9ED8-5D5014846B28}"
-	ProjectSection(SolutionItems) = preProject
-		README.MD = README.MD
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

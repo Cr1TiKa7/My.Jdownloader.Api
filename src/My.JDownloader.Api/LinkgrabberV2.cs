@@ -101,12 +101,12 @@ namespace My.JDownloader.Api
         }
 
         /// <summary>
-        /// Gets all links that are currently in the linkcollector list.
+        /// Gets all links that are currently in the linkcollector.
         /// </summary>
         /// <param name="device">The target device</param>
         /// <param name="maxResults">Maximum number of return values.</param>
         /// <returns>Returns a list of all links that are currently in the linkcollector list.</returns>
-        public List<CrawledLinkDataObject> QueryLinks(DeviceObject device, int maxResults = -1)
+        public List<QueryLinksResponseObject> QueryLinks(DeviceObject device, int maxResults = -1)
         {
             QueryLinksObject queryLink = new QueryLinksObject
             {
@@ -121,9 +121,38 @@ namespace My.JDownloader.Api
 
             var response =
                 _ApiHandler.CallAction<CrawledLinkObject>(device, "/linkgrabberv2/queryLinks", param, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return null;
-            return response.Data;
+            return response?.Data;
+        }
+
+        /// <summary>
+        /// Gets a list of available packages that are currently in the linkcollector.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <param name="requestObject">The request object which contains properties to define the return properties.</param>
+        /// <returns>Returns a list of all available packages.</returns>
+        public List<QueryPackagesResponseObject> QueryPackages(DeviceObject device, QueryPackagesRequestObject requestObject)
+        {
+            string json = JsonConvert.SerializeObject(requestObject);
+            var param = new[] {json};
+
+            var response =
+                _ApiHandler.CallAction<QueryPackagesObject>(device, "/linkgrabberv2/queryPackages", param, JDownloaderHandler.LoginObject, true);
+            return response?.Data;
+        }
+
+        /// <summary>
+        /// Allows you to change the download directory of multiple packages.
+        /// </summary>
+        /// <param name="device">The target device</param>
+        /// <param name="directory">The new download directory.</param>
+        /// <param name="packageIds">The ids of the packages.</param>
+        /// <returns>True if successfull</returns>
+        public bool SetDownloadDirectory(DeviceObject device, string directory, long[] packageIds)
+        {
+            var param = new object[] {directory, packageIds};
+            var response =
+                _ApiHandler.CallAction<object>(device, "/linkgrabberv2/setDownloadDirectory", param, JDownloaderHandler.LoginObject,true);
+            return response != null;
         }
     }
 }

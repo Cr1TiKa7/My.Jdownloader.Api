@@ -3,6 +3,8 @@
 This is an simple wrapper for the official My.JDownloader.Api written in c#.
 It's an rewritten and extended version of https://github.com/noone2407/MyJDownloaderApi.
 
+Currently it supports: .NET 4.0, .NET 4.5, .NET 4.6 and .NETCore 2.0
+
 > Feel free to request missing calls, bugs or suggestions for improvements.
 
 #### Usage
@@ -19,34 +21,45 @@ The JDownloaderHandler contains the following methods:
 - Connect(email, password) : boolean
 - Reconnect() : boolean
 - Disconnect() : boolean
-- GetDevices() : List<DeviceObject)
+- GetDevices() : List<DeviceObject>
 
 #### Namespaces
 
 For a better overview, the calls are split into different namespaces.
 So far the library contains the following namespaces and methods:
 
-- AccountsV2
+- AccountsV2 | 14/14 calls done
     - AddAccount(device, email, password) : boolean
-    - EnableAccounts(device, accountIds) : boolean
+	- AddBasicAuth(device, BasicAuthObject) : boolean
     - DisableAccounts(device, accountIds) : boolean
+    - EnableAccounts(device, accountIds) : boolean
+	- GetPremiumHosterUrl(device, hoster) : string
     - ListAccounts(device, ListAccountRequestObject) : ListAccountResponseObject[]
+	- ListBasicAuth(device) : ListBasicAuthResponseObject[]
+	- ListPremiumHoster(device) : string[]
     - ListPremiumHosterUrls(device) : Dictionary<string, string>
     - RefreshAccounts(device, accountIds) : boolean
     - RemoveAccounts(device, accountIds) : boolean
+	- RemoveBasicAuths(device, basicAuthIds) : boolean
     - SetUsernameAndPassword(device, accountId, email, password) : boolean
-- DownloadController
+	- UpdateBasicAuth(device, BasicAuthObject) : boolean
+	
+- DownloadController | 6/6 calls done
+	- ForceDownload(device, linkIds[], packageIds[]) : boolean
     - Start(device) : boolean
     - Stop(device) : boolean
     - Pause(device, pause) : boolean
     - GetCurrentState(device) : string
-- LinkgrabberV2
+	- GetSpeedInBps(device) : long
+- LinkgrabberV2 | 8/30 calls done
     - AddLinks(device, AddLinkRequestObject) : boolean
     - AddContainer(device, containerType, content) : boolean
     - ClearList(Device) : boolean
     - GetPackageCount(Device) : int
     - IsCollecting(device) : boolean
-    - QueryLinks(device, maxResults) : CrawledLinkDataObject
+    - QueryLinks(device, maxResults) : QueryLinksResponseObject
+	- QueryPackages(device, QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
+	- SetDownloadDirectory(device, directory, packageIds[]) : boolean
 
 #### Samples
 

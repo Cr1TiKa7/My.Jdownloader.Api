@@ -75,6 +75,7 @@ namespace My.JDownloader.Api
             LoginObject = response;
             LoginObject.ServerEncryptionToken = UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
             LoginObject.DeviceEncryptionToken = UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
+            IsConnected = true;
             return true;
         }
 
