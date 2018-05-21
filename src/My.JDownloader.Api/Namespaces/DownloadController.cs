@@ -2,7 +2,7 @@
 using My.JDownloader.Api.ApiObjects;
 using My.JDownloader.Api.ApiObjects.Devices;
 
-namespace My.JDownloader.Api
+namespace My.JDownloader.Api.Namespaces
 {
     public class DownloadController
     {

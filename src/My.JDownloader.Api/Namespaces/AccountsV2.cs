@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.ApiObjects;
 using My.JDownloader.Api.ApiObjects.AccountV2;
@@ -7,7 +6,7 @@ using My.JDownloader.Api.ApiObjects.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace My.JDownloader.Api
+namespace My.JDownloader.Api.Namespaces
 {
     public class AccountsV2
     {

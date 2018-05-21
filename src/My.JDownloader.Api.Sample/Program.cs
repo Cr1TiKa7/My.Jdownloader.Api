@@ -7,17 +7,20 @@ namespace My.JDownloader.Api.Sample
         static void Main(string[] args)
         {
             JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler();
-            _jdownloaderHandler.Connect("thetrust3343@yahoo.de", "Cocacola123");
-            var devices = _jdownloaderHandler.GetDevices();
-            _jdownloaderHandler.AccountsV2.AddAccount(devices[0],"mega.co.nz", "test", "test123");
-            //_jdownloaderHandler.LinkgrabberV2.AddLinks(
-            //    devices[0],
-            //    "https://www.filecrypt.cc/Container/C85E8B070F.html",
-            //    "Deadpool 2", "Z:\\Filme\\Deadpool 2");
-            _jdownloaderHandler.LinkgrabberV2.QueryLinks(devices[0], 5);
-            Console.WriteLine(_jdownloaderHandler.LinkgrabberV2.GetPackageCount(devices[0]));
-            Console.ReadLine();
-            // _jdownloaderHandler.StartDownload(devices[0]);
+            _jdownloaderHandler.Connect("test123@test.com", "test");
+            if (_jdownloaderHandler.IsConnected)
+            {
+                var devices = _jdownloaderHandler.GetDevices();
+
+                if (devices.Count > 0)
+                {
+                    if (_jdownloaderHandler.AccountsV2.AddAccount(devices[0], "mega.co.nz", "test123@test.com",
+                        "test123"))
+                    {
+                        Console.WriteLine("Account successfully added.");
+                    }
+                }
+            }
         }
     }
 }

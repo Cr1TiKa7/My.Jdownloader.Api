@@ -5,7 +5,7 @@ using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.LinkgrabberV2;
 using Newtonsoft.Json;
 
-namespace My.JDownloader.Api
+namespace My.JDownloader.Api.Namespaces
 {
     public class LinkgrabberV2
     {
@@ -20,13 +20,7 @@ namespace My.JDownloader.Api
         /// Adds a download link to the given device.
         /// </summary>
         /// <param name="device">The target device</param>
-        /// <param name="links">The downloadlinks. Seperated by a space.</param>
-        /// <param name="packageName">The name of the package.</param>
-        /// <param name="priority">The priority of the download. Can be one of the following: HIGHEST, HIGHER, HIGH, DEFAULT, LOW, LOWER, LOWEST</param>
-        /// <param name="downloadPassword">The password which may be needed for a download.</param>
-        /// <param name="extractPassword">The password if the archive which will be downloaded is locked with.</param>
-        /// <param name="autoStart">If true the download starts automatically.</param>
-        /// <param name="autoExtract">If true it extracts the downloaded archive after finishing the download.</param>
+        /// <param name="requestObject">Contains informations like the link itself or the priority.</param>
         public bool AddLinks(DeviceObject device, AddLinkRequestObject requestObject)
         {
             requestObject.Links.Replace(";", "\\r\\n");

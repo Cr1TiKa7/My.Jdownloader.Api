@@ -51,6 +51,18 @@ So far the library contains the following namespaces and methods:
     - Pause(device, pause) : boolean
     - GetCurrentState(device) : string
 	- GetSpeedInBps(device) : long
+	
+- Extensions | 5/5 calls done
+	- Install(device, extensionId) : boolean
+	- IsEnabled(device, className) : boolean
+	- IsInstalled(device, extensionId) : boolean
+	- List(device, ExtensionRequestObject) : ExtensionResponseObject[]
+	- SetEnabled(device, className, enabled) : boolean
+
+- Extraction | 2/7 calls done
+	- AddArchivePassword(device, password) : boolean
+	- CancelExtraction(device, controllerId) : boolean
+
 - LinkgrabberV2 | 8/30 calls done
     - AddLinks(device, AddLinkRequestObject) : boolean
     - AddContainer(device, containerType, content) : boolean
@@ -60,6 +72,11 @@ So far the library contains the following namespaces and methods:
     - QueryLinks(device, maxResults) : QueryLinksResponseObject
 	- QueryPackages(device, QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
 	- SetDownloadDirectory(device, directory, packageIds[]) : boolean
+	
+- Update | 3/3 calls done
+	- IsUpdateAvailable(device) : boolean
+	- RestartAndUpdate(device)
+	- RunUpdateCheck(device)
 
 #### Samples
 

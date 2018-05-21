@@ -6,6 +6,7 @@ using System.Web;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.Login;
+using My.JDownloader.Api.Namespaces;
 
 namespace My.JDownloader.Api
 {
@@ -26,7 +27,10 @@ namespace My.JDownloader.Api
 
         public AccountsV2 AccountsV2;
         public DownloadController DownloadController;
+        public Extensions Extensions;
+        public Extraction Extraction;
         public LinkgrabberV2 LinkgrabberV2;
+        public Update Update;
 
         public JDownloaderHandler()
         {
@@ -41,9 +45,12 @@ namespace My.JDownloader.Api
 
         private void InitializeClasses()
         {
-            LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
             AccountsV2 = new AccountsV2(_ApiHandler);
             DownloadController = new DownloadController(_ApiHandler);
+            Extensions = new Extensions(_ApiHandler);
+            Extraction = new Extraction(_ApiHandler);
+            LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
+            Update = new Update(_ApiHandler);
         }
 
         #region "Connection methods"
