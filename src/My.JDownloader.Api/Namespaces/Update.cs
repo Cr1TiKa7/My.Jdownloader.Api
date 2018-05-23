@@ -7,20 +7,21 @@ namespace My.JDownloader.Api.Namespaces
     public class Update
     {
         private readonly JDownloaderApiHandler _ApiHandler;
+        private readonly DeviceObject _Device;
 
-        internal Update(JDownloaderApiHandler apiHandler)
+        internal Update(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
             _ApiHandler = apiHandler;
+            _Device = device;
         }
 
         /// <summary>
         /// Checks if the client has an update available.
         /// </summary>
-        /// <param name="device">The target device.</param>
         /// <returns>True if an update is available.</returns>
-        public bool IsUpdateAvailable(DeviceObject device)
+        public bool IsUpdateAvailable()
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/update/isUpdateAvailable",
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/update/isUpdateAvailable",
                 null, JDownloaderHandler.LoginObject, true);
             return response?.Data != null && (bool)response.Data ;
         }
@@ -28,20 +29,18 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Restarts the client and starts the update.
         /// </summary>
-        /// <param name="device">The target device.</param>
-        public void RestartAndUpdate(DeviceObject device)
+        public void RestartAndUpdate()
         {
-            _ApiHandler.CallAction<object>(device, "/update/restartAndUpdate",
+            _ApiHandler.CallAction<object>(_Device, "/update/restartAndUpdate",
                 null, JDownloaderHandler.LoginObject, true);
         }
 
         /// <summary>
         /// Start the update check on the client.
         /// </summary>
-        /// <param name="device">The target device.</param>
-        public void RunUpdateCheck(DeviceObject device)
+        public void RunUpdateCheck()
         {
-            _ApiHandler.CallAction<object>(device, "/update/runUpdateCheck",
+            _ApiHandler.CallAction<object>(_Device, "/update/runUpdateCheck",
                 null, JDownloaderHandler.LoginObject, true);
         }
     }

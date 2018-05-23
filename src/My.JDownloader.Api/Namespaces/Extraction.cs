@@ -7,22 +7,23 @@ namespace My.JDownloader.Api.Namespaces
     public class Extraction
     {
         private readonly JDownloaderApiHandler _ApiHandler;
+        private readonly DeviceObject _Device;
 
-        internal Extraction(JDownloaderApiHandler apiHandler)
+        internal Extraction(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
             _ApiHandler = apiHandler;
+            _Device = device;
         }
 
         /// <summary>
         /// Adds an archive password to the client.
         /// </summary>
-        /// <param name="device">The target device.</param>
         /// <param name="password">The password to add.</param>
         /// <returns>True if successfull.</returns>
-        public bool AddArchivePassword(DeviceObject device, string password)
+        public bool AddArchivePassword(string password)
         {
             var param = new[] {password};
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/extraction/addArchivePassword",
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extraction/addArchivePassword",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null;
@@ -31,13 +32,12 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Cancels an extraction process.
         /// </summary>
-        /// <param name="device">The target device.</param>
         /// <param name="controllerId">The id of the controll you want to cancel.</param>
         /// <returns>True if successfull.</returns>
-        public bool CancelExtraction(DeviceObject device, string controllerId)
+        public bool CancelExtraction(string controllerId)
         {
             var param = new[] { controllerId };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(device, "/extraction/cancelExtraction",
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extraction/cancelExtraction",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null && (bool)response.Data;

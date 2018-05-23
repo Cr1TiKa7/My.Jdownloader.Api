@@ -1,6 +1,6 @@
 ﻿namespace My.JDownloader.Api.ApiObjects.Login
 {
-    public class LoginObject
+    internal class LoginObject
     {
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "sessiontoken")]
@@ -9,6 +9,9 @@
         public string RegainToken { get; set; }
         [Newtonsoft.Json.JsonProperty(PropertyName = "rid")]
         public int RequestId { get; set; }
+
+        public string Username { get; set; }
+        public string Password { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public byte[] ServerEncryptionToken;

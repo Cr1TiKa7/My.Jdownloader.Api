@@ -1,4 +1,7 @@
-﻿namespace My.JDownloader.Api.ApiObjects.Devices
+﻿using My.JDownloader.Api.ApiHandler;
+using My.JDownloader.Api.Namespaces;
+
+namespace My.JDownloader.Api.ApiObjects.Devices
 {
     public class DeviceObject
     {
@@ -6,7 +9,7 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public string Status { get; set; }
-
+        
         public override string ToString()
         {
             return Name;

@@ -29,74 +29,68 @@ For a better overview, the calls are split into different namespaces.
 So far the library contains the following namespaces and methods:
 
 - AccountsV2 | 14/14 calls done
-    - AddAccount(device, email, password) : boolean
-	- AddBasicAuth(device, BasicAuthObject) : boolean
-    - DisableAccounts(device, accountIds) : boolean
-    - EnableAccounts(device, accountIds) : boolean
-	- GetPremiumHosterUrl(device, hoster) : string
-    - ListAccounts(device, ListAccountRequestObject) : ListAccountResponseObject[]
-	- ListBasicAuth(device) : ListBasicAuthResponseObject[]
-	- ListPremiumHoster(device) : string[]
-    - ListPremiumHosterUrls(device) : Dictionary<string, string>
-    - RefreshAccounts(device, accountIds) : boolean
-    - RemoveAccounts(device, accountIds) : boolean
-	- RemoveBasicAuths(device, basicAuthIds) : boolean
-    - SetUsernameAndPassword(device, accountId, email, password) : boolean
-	- UpdateBasicAuth(device, BasicAuthObject) : boolean
+    - AddAccount(email, password) : boolean
+	- AddBasicAuth(BasicAuthObject) : boolean
+    - DisableAccounts(accountIds) : boolean
+    - EnableAccounts(accountIds) : boolean
+	- GetPremiumHosterUrl(hoster) : string
+    - ListAccounts(ListAccountRequestObject) : ListAccountResponseObject[]
+	- ListBasicAuth() : ListBasicAuthResponseObject[]
+	- ListPremiumHoster() : string[]
+    - ListPremiumHosterUrls() : Dictionary<string, string>
+    - RefreshAccounts(accountIds) : boolean
+    - RemoveAccounts(accountIds) : boolean
+	- RemoveBasicAuths(basicAuthIds) : boolean
+    - SetUsernameAndPassword(accountId, email, password) : boolean
+	- UpdateBasicAuth(BasicAuthObject) : boolean
 	
 - DownloadController | 6/6 calls done
-	- ForceDownload(device, linkIds[], packageIds[]) : boolean
-    - Start(device) : boolean
-    - Stop(device) : boolean
-    - Pause(device, pause) : boolean
-    - GetCurrentState(device) : string
-	- GetSpeedInBps(device) : long
+	- ForceDownload(linkIds[], packageIds[]) : boolean
+    - Start() : boolean
+    - Stop() : boolean
+    - Pause(pause) : boolean
+    - GetCurrentState() : string
+	- GetSpeedInBps() : long
 	
 - Extensions | 5/5 calls done
-	- Install(device, extensionId) : boolean
-	- IsEnabled(device, className) : boolean
-	- IsInstalled(device, extensionId) : boolean
-	- List(device, ExtensionRequestObject) : ExtensionResponseObject[]
-	- SetEnabled(device, className, enabled) : boolean
+	- Install(extensionId) : boolean
+	- IsEnabled(className) : boolean
+	- IsInstalled(extensionId) : boolean
+	- List(ExtensionRequestObject) : ExtensionResponseObject[]
+	- SetEnabled(className, enabled) : boolean
 
 - Extraction | 2/7 calls done
-	- AddArchivePassword(device, password) : boolean
-	- CancelExtraction(device, controllerId) : boolean
+	- AddArchivePassword(password) : boolean
+	- CancelExtraction(controllerId) : boolean
 
 - LinkgrabberV2 | 8/30 calls done
-    - AddLinks(device, AddLinkRequestObject) : boolean
-    - AddContainer(device, containerType, content) : boolean
-    - ClearList(Device) : boolean
-    - GetPackageCount(Device) : int
-    - IsCollecting(device) : boolean
-    - QueryLinks(device, maxResults) : QueryLinksResponseObject
-	- QueryPackages(device, QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
-	- SetDownloadDirectory(device, directory, packageIds[]) : boolean
+    - AddLinks(AddLinkRequestObject) : boolean
+    - AddContainer(containerType, content) : boolean
+    - ClearList() : boolean
+    - GetPackageCount() : int
+    - IsCollecting() : boolean
+    - QueryLinks(maxResults) : QueryLinksResponseObject
+	- QueryPackages(QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
+	- SetDownloadDirectory(directory, packageIds[]) : boolean
 	
 - Update | 3/3 calls done
-	- IsUpdateAvailable(device) : boolean
-	- RestartAndUpdate(device)
-	- RunUpdateCheck(device)
+	- IsUpdateAvailable() : boolean
+	- RestartAndUpdate()
+	- RunUpdateCheck()
 
 #### Samples
 
-To get all devices that are currently connected to your My.JDownloader account:
-``` c#
-var devices = _jdownloaderHandler.GetDevices();
-``` 
+Here is a simple sample code which shows you how to connect, get a device handler and how to call a method:
 
-To add links to the linkcollector:
 ``` c#
-_jdownloaderHandler.LinkgrabberV2.AddLinks(
-    devices[0],
-    new AddLinkRequestObject
-    {
-        Links = "www.testurl.com;www.testurl2.com",
-        PackageName = "Test Package"
-    });
-``` 
-
-To start downloading:
-``` c#
-_jdownloaderHandler.DownloadController.Start(devices[0]);
+JDownloaderHandler _JDownloaderHandler = new JDownloaderHandler("YOUREMAIL","YOURPASSWORD");
+if (_JDownloaderHandler.IsConnected)
+{
+    var devices = _JDownloaderHandler.GetDevices();
+    if (devices.Count = 0)
+    return;
+    
+    var deviceHandler = _JDownloaderHandler.GetDeviceInstance(devices[0]);
+    deviceHandler.AccountV2.AddAccount("mega.co.nz", "test123", "test123");
+}
 ``` 

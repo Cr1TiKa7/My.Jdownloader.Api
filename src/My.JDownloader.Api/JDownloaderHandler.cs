@@ -45,12 +45,12 @@ namespace My.JDownloader.Api
 
         private void InitializeClasses()
         {
-            AccountsV2 = new AccountsV2(_ApiHandler);
-            DownloadController = new DownloadController(_ApiHandler);
-            Extensions = new Extensions(_ApiHandler);
-            Extraction = new Extraction(_ApiHandler);
-            LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
-            Update = new Update(_ApiHandler);
+            //AccountsV2 = new AccountsV2(_ApiHandler);
+            //DownloadController = new DownloadController(_ApiHandler);
+            //Extensions = new Extensions(_ApiHandler);
+            //Extraction = new Extraction(_ApiHandler);
+            //LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
+            //Update = new Update(_ApiHandler);
         }
 
         #region "Connection methods"
@@ -140,6 +140,24 @@ namespace My.JDownloader.Api
             }
 
             return devices;
+        }
+
+        /// <summary>
+        /// Creates an instance of the DeviceHandler class. 
+        /// This is neccessary to call methods!
+        /// </summary>
+        /// <param name="device">The device you want to call the methods on.</param>
+        /// <returns>An deviceHandler instance.</returns>
+        public DeviceHandler GetDeviceHandler(DeviceObject device)
+        {
+            if (IsConnected)
+            {
+                //TODO: Make it possible to directly connect to the jdownloader client. If it's not working use the relay server.
+                //var tmp = _ApiHandler.CallAction<DefaultReturnObject>(device, "/device/getDirectConnectionInfos",
+                //    null, LoginObject, true);
+                return new DeviceHandler(device, _ApiHandler, LoginObject);
+            }
+            return null;
         }
 
 
