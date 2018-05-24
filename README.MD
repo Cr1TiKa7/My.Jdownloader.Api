@@ -63,6 +63,14 @@ So far the library contains the following namespaces and methods:
 	- AddArchivePassword(password) : boolean
 	- CancelExtraction(controllerId) : boolean
 
+- JD | 6/6 calls done
+	- DoSomethingCool()
+	- GetCoreRevision() : int
+	- RefreshPlugins() : boolean
+	- Sum() : int
+	- Uptime() : long
+	- Version() : long
+	
 - LinkgrabberV2 | 8/30 calls done
     - AddLinks(AddLinkRequestObject) : boolean
     - AddContainer(containerType, content) : boolean

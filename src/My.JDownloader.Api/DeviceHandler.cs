@@ -28,6 +28,7 @@ namespace My.JDownloader.Api
         public Extraction Extraction;
         public LinkgrabberV2 LinkgrabberV2;
         public Update Update;
+        public JD Jd;
 
         internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject LoginObject)
         {
@@ -41,13 +42,14 @@ namespace My.JDownloader.Api
             Extraction = new Extraction(_ApiHandler, _Device);
             LinkgrabberV2 = new LinkgrabberV2(_ApiHandler, _Device);
             Update = new Update(_ApiHandler, _Device);
+            Jd = new JD(_ApiHandler, _Device);
+            DirectConnect();
         }
 
         /// <summary>
         /// Tries to directly connect to the JDownloader Client.
         /// </summary>
-        /// <returns>True if successfull.</returns>
-        public bool DirectConnect()
+        private void DirectConnect()
         {
             bool connected = false;
             foreach (var conInfos in GetDirectConnectionInfos())
@@ -60,8 +62,6 @@ namespace My.JDownloader.Api
             }
             if (connected == false)
                 Connect("http://api.jdownloader.org");
-
-            return connected;
         }
 
 
