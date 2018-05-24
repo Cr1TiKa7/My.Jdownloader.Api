@@ -16,8 +16,13 @@ namespace My.JDownloader.Api.ApiHandler
 {
     internal class JDownloaderApiHandler
     {
-        private int _RequestId =(int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+        private int _RequestId = (int) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
         private string _ApiUrl = "http://api.jdownloader.org";
+
+        public void SetApiUrl(string newApiUrl)
+        {
+            _ApiUrl = newApiUrl;
+        }
 
         public T CallServer<T>(string query, byte[] key, string param = "")
         {
@@ -48,26 +53,28 @@ namespace My.JDownloader.Api.ApiHandler
             string response = PostMethod(url, param, key);
             if (response == null)
                 return default(T);
-            return (T)JsonConvert.DeserializeObject(response,typeof(T));
+            return (T) JsonConvert.DeserializeObject(response, typeof(T));
         }
 
-        public T CallAction<T>(DeviceObject device, string action, object param, LoginObject loginObject, bool decryptResponse = false)
+        public T CallAction<T>(DeviceObject device, string action, object param, LoginObject loginObject,
+            bool decryptResponse = false)
         {
             if (device == null)
                 throw new ArgumentNullException("The device can't be null.");
             if (string.IsNullOrEmpty(device.Id))
-                throw new ArgumentException("The id of the device is empty. Please call again the GetDevices Method and try again.");
+                throw new ArgumentException(
+                    "The id of the device is empty. Please call again the GetDevices Method and try again.");
 
             string query =
                 $"/t_{HttpUtility.UrlEncode(loginObject.SessionToken)}_{HttpUtility.UrlEncode(device.Id)}{action}";
             CallActionObject callActionObject = new CallActionObject
             {
-                 ApiVer = 1,
-                 Params = param,
-                 RequestId = GetUniqueRid(),
-                 Url =action
+                ApiVer = 1,
+                Params = param,
+                RequestId = GetUniqueRid(),
+                Url = action
             };
-            
+
             string url = _ApiUrl + query;
             string json = JsonConvert.SerializeObject(callActionObject);
             json = Encrypt(json, loginObject.DeviceEncryptionToken);
@@ -79,11 +86,11 @@ namespace My.JDownloader.Api.ApiHandler
                 if (decryptResponse)
                 {
                     string tmp = Decrypt(response, loginObject.DeviceEncryptionToken);
-                    return (T)JsonConvert.DeserializeObject(tmp, typeof(T));
+                    return (T) JsonConvert.DeserializeObject(tmp, typeof(T));
                 }
                 throw new InvalidRequestIdException("The 'RequestId' differs from the 'Requestid' from the query.");
             }
-            return (T)JsonConvert.DeserializeObject(response,typeof(T));
+            return (T) JsonConvert.DeserializeObject(response, typeof(T));
         }
 
         private string PostMethod(string url, string body = "", byte[] ivKey = null)
@@ -120,12 +127,13 @@ namespace My.JDownloader.Api.ApiHandler
         }
 
         #region "Encrypt, Decrypt and Signature"
-        
+
         private string GetSignature(string data, byte[] key)
         {
             if (key == null)
             {
-                throw new Exception("The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
+                throw new Exception(
+                    "The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
             }
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var hmacsha256 = new HMACSHA256(key);
@@ -139,7 +147,8 @@ namespace My.JDownloader.Api.ApiHandler
         {
             if (ivKey == null)
             {
-                 throw new Exception("The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
+                throw new Exception(
+                    "The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
             }
             var iv = new byte[16];
             var key = new byte[16];
@@ -171,11 +180,13 @@ namespace My.JDownloader.Api.ApiHandler
             byte[] encrypted = msEncrypt.ToArray();
             return Convert.ToBase64String(encrypted);
         }
+
         private string Decrypt(string data, byte[] ivKey)
         {
             if (ivKey == null)
             {
-                throw new Exception("The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
+                throw new Exception(
+                    "The ivKey is null. Please check your login informations. If it's still null the server may has disconnected you.");
             }
             var iv = new byte[16];
             var key = new byte[16];
@@ -209,6 +220,7 @@ namespace My.JDownloader.Api.ApiHandler
             }
             return result;
         }
+
         #endregion
 
         private int GetUniqueRid()

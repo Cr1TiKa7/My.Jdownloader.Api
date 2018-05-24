@@ -19,9 +19,6 @@ namespace My.JDownloader.Api
         private byte[] _LoginSecret;
         private byte[] _DeviceSecret;
 
-        private const string _ServerDomain = "server";
-        private const string _DeviceDomain = "device";
-        private const string _AppKey = "my.jdownloader.api.wrapper";
         
         private readonly JDownloaderApiHandler _ApiHandler = new JDownloaderApiHandler();
 
@@ -64,12 +61,12 @@ namespace My.JDownloader.Api
         public bool Connect(string email, string password)
         {
             //Calculating the Login and Device secret
-            _LoginSecret = GetSecret(email, password, _ServerDomain);
-            _DeviceSecret = GetSecret(email, password, _DeviceDomain);
+            _LoginSecret = Utils.GetSecret(email, password, Utils.ServerDomain);
+            _DeviceSecret = Utils.GetSecret(email, password, Utils.DeviceDomain);
 
             //Creating the query for the connection request
             string connectQueryUrl =
-                $"/my/connect?email={HttpUtility.UrlEncode(email)}&appkey={HttpUtility.UrlEncode(_AppKey)}";
+                $"/my/connect?email={HttpUtility.UrlEncode(email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
 
             //Calling the query
             var response = _ApiHandler.CallServer<LoginObject>(connectQueryUrl, _LoginSecret);
@@ -80,8 +77,10 @@ namespace My.JDownloader.Api
 
             //Else we are saving the response which contains the SessionToken, RegainToken and the RequestId
             LoginObject = response;
-            LoginObject.ServerEncryptionToken = UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
-            LoginObject.DeviceEncryptionToken = UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
+            LoginObject.Email = email;
+            LoginObject.Password = password;
+            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
+            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
             IsConnected = true;
             return true;
         }
@@ -93,14 +92,14 @@ namespace My.JDownloader.Api
         public bool Reconnect()
         {
             string query =
-                $"/my/reconnect?appkey{HttpUtility.UrlEncode(_AppKey)}&sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}&regaintoken={HttpUtility.UrlEncode(LoginObject.RegainToken)}";
+                $"/my/reconnect?appkey{HttpUtility.UrlEncode(Utils.AppKey)}&sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}&regaintoken={HttpUtility.UrlEncode(LoginObject.RegainToken)}";
             var response = _ApiHandler.CallServer<LoginObject>(query, LoginObject.ServerEncryptionToken);
             if (response == null)
                 return false;
 
             LoginObject = response;
-            LoginObject.ServerEncryptionToken = UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
-            LoginObject.DeviceEncryptionToken = UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
+            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
+            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
             IsConnected = true;
             return IsConnected;
         }
@@ -159,44 +158,5 @@ namespace My.JDownloader.Api
             }
             return null;
         }
-
-
-        #region "Secret and Encryption tokens"
-
-        private byte[] GetSecret(string email, string password, string domain)
-        {
-            return EncodeStringToSha256(email.ToLower() + password + domain);
-        }
-
-        private readonly SHA256Managed _Sha256Managed = new SHA256Managed();
-
-        private byte[] EncodeStringToSha256(string text)
-        {
-            return _Sha256Managed.ComputeHash(Encoding.UTF8.GetBytes(text));
-        }
-
-        private byte[] UpdateEncryptionToken(byte[] oldToken, string UpdatedToken)
-        {
-            byte[] newToken = GetByteArrayByHexString(UpdatedToken);
-            var newHash = new byte[oldToken.Length + newToken.Length];
-            oldToken.CopyTo(newHash, 0);
-            newToken.CopyTo(newHash, 32);
-            var hashString = new SHA256Managed();
-            hashString.ComputeHash(newHash);
-            return hashString.Hash;
-        }
-
-        private byte[] GetByteArrayByHexString(string hexString)
-        {
-            hexString = hexString.Replace("-", "");
-            byte[] ret = new byte[hexString.Length / 2];
-            for (int i = 0; i < ret.Length; i++)
-            {
-                ret[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-            }
-            return ret;
-        }
-
-        #endregion
     }
 }
