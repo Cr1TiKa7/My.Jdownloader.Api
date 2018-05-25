@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using My.JDownloader.Api.ApiObjects.Devices;
 
 namespace My.JDownloader.Api.Sample
 {
@@ -6,22 +7,17 @@ namespace My.JDownloader.Api.Sample
     {
         static void Main(string[] args)
         {
-            JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler();
-            _jdownloaderHandler.Connect("email", "password");
-            if (_jdownloaderHandler.IsConnected)
+            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("YOUREMAIL", "YOURPASSWORD","YOURAPPKEY");
+            if (jdownloaderHandler.IsConnected)
             {
-                var devices = _jdownloaderHandler.GetDevices();
-
-                if (devices.Count > 0)
+                var devices = jdownloaderHandler.GetDevices();
+                foreach (DeviceObject device in devices)
                 {
-                    var dHandler = _jdownloaderHandler.GetDeviceHandler(devices[0]);
-                    dHandler.AccountsV2.AddAccount("mega.co.nz", "testWithoutDirectConnection", "test123");
-                    if (dHandler.DirectConnect())
-                    {
-                        dHandler.AccountsV2.AddAccount("mega.co.nz", "testWithDirectConnection", "test123");
-                    }
+                    var dHandler = jdownloaderHandler.GetDeviceHandler(device);
+                    dHandler.AccountsV2.AddAccount("mega.co.nz", "YOURMEAIL", "YOURPASSWORD");
                 }
             }
         }
+        
     }
 }

@@ -2,6 +2,8 @@
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.ApiObjects;
 using My.JDownloader.Api.ApiObjects.Devices;
+using My.JDownloader.Api.ApiObjects.System;
+using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
 {
@@ -24,15 +26,39 @@ namespace My.JDownloader.Api.Namespaces
             _ApiHandler.CallAction<object>(_Device, "/system/exitJD", null, JDownloaderHandler.LoginObject, true);
         }
 
-
-        public List<object> GetStorageInfos(string path)
+        /// <summary>
+        /// Gets storage informations of the given path.
+        /// </summary>
+        /// <param name="path">The Path you want to check.</param>
+        /// <returns>An array with storage informations.</returns>
+        public StorageInfoReturnObject[] GetStorageInfos(string path)
         {
             var param = new[] {path};
             var tmp =_ApiHandler.CallAction<DefaultReturnObject>(_Device, "/system/getStorageInfos", param, JDownloaderHandler.LoginObject, true);
 
-            return new List<object>();
+            var data = (JArray) tmp?.Data;
+            return data?.ToObject<StorageInfoReturnObject[]>();
         }
 
+        /// <summary>
+        /// Gets information of the system the JDownloader client is running on.
+        /// </summary>
+        /// <returns></returns>
+        public SystemInfoReturnObject GetSystemInfos()
+        {
+            var tmp = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/system/getSystemInfos", null, JDownloaderHandler.LoginObject, true);
+
+            var data = (JObject) tmp?.Data;
+            return data?.ToObject<SystemInfoReturnObject>();
+        }
+
+        /// <summary>
+        /// Hibernates the current os the JDownloader client is running on.
+        /// </summary>
+        public void HibernateOS()
+        {
+            _ApiHandler.CallAction<object>(_Device, "/system/hibernateOS", null, JDownloaderHandler.LoginObject, true);
+        }
 
         /// <summary>
         /// Restarts the JDownloader client.
@@ -40,6 +66,23 @@ namespace My.JDownloader.Api.Namespaces
         public void RestartJd()
         {
             _ApiHandler.CallAction<object>(_Device, "/system/restartJD", null, JDownloaderHandler.LoginObject, true);
+        }
+
+        /// <summary>
+        /// Shutsdown the current os the JDownloader client is running on.
+        /// </summary>
+        /// <param name="force">True if you want to force the shutdown process.</param>
+        public void ShutdownOS(bool force)
+        {
+            _ApiHandler.CallAction<object>(_Device, "/system/shutdownOS", new [] {force}, JDownloaderHandler.LoginObject, true);
+        }
+
+        /// <summary>
+        /// Sets the current os the JDownloader client is running on in standby.
+        /// </summary>
+        public void StandbyOS()
+        {
+            _ApiHandler.CallAction<object>(_Device, "/system/standbyOS", null, JDownloaderHandler.LoginObject, true);
         }
     }
 }

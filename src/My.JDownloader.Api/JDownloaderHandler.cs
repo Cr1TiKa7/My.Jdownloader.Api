@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Web;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.Login;
-using My.JDownloader.Api.Namespaces;
 
 namespace My.JDownloader.Api
 {
@@ -22,14 +18,25 @@ namespace My.JDownloader.Api
         
         private readonly JDownloaderApiHandler _ApiHandler = new JDownloaderApiHandler();
         
-        public JDownloaderHandler()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appkey">The name of the app. Should be unique!</param>
+        public JDownloaderHandler(string appkey)
         {
+            Utils.AppKey = appkey;
             InitializeClasses();
         }
 
-        public JDownloaderHandler(string email, string password)
+        /// <summary>
+        /// </summary>
+        /// <param name="email">Your email of your my.jdownloader.org account.</param>
+        /// <param name="password">Your password of your my.jdownloader.org account.</param>
+        /// <param name="appKey">The name of the app. Should be unique!</param>
+        public JDownloaderHandler(string email, string password, string appKey)
         {
             Connect(email, password);
+            Utils.AppKey = appKey;
             InitializeClasses();
         }
 

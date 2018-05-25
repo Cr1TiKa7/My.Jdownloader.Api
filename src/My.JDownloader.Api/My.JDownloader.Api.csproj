@@ -9,9 +9,9 @@
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>1.2.0</Version>
-    <PackageReleaseNotes>Completed the AccountsV2 namespace:
-Completed the DownloadController namespace:</PackageReleaseNotes>
+    <Version>2.0.0</Version>
+    <PackageReleaseNotes>Completly reworked!
+Added some more namespaces and calls.</PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

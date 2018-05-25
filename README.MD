@@ -74,10 +74,16 @@ So far the library contains the following namespaces and methods:
 - LinkCrawler | 1/1 calls done
     - IsCrawling() : boolean
     
-- LinkGrabberV2 | 8/30 calls done
+- LinkGrabberV2 | 13/30 calls done
+	- Abort() : boolean
+	- Abort(jobId) : boolean
     - AddLinks(AddLinkRequestObject) : boolean
     - AddContainer(containerType, content) : boolean
     - ClearList() : boolean
+	- CleanUp(linkIds, packageIds, action, mode, selection) : boolean
+	- GetChildrenChanged(structureWatermark) : long
+	- GetDownloadFolderHistorySelectionBase() : string[]
+	- GetStopMarkedLink() : StopMarkedLinkReturnObject
     - GetPackageCount() : int
     - IsCollecting() : boolean
     - QueryLinks(maxResults) : QueryLinksResponseObject
@@ -85,7 +91,13 @@ So far the library contains the following namespaces and methods:
 	- SetDownloadDirectory(directory, packageIds[]) : boolean
 	
 - System | 7/7 calls done
-    
+    - ExitJd()
+	- GetStorageInfos(path) : StorageInfoReturnObject[]
+	- GetSystemInfos() : SystemInfoReturnObject
+	- HibernateOS()
+	- RestartJd()
+	- ShutdownOS()
+	- StandbyOS()
 
 - Update | 3/3 calls done
 	- IsUpdateAvailable() : boolean

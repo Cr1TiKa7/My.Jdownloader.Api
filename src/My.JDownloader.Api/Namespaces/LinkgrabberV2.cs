@@ -4,6 +4,7 @@ using My.JDownloader.Api.ApiObjects;
 using My.JDownloader.Api.ApiObjects.Devices;
 using My.JDownloader.Api.ApiObjects.LinkgrabberV2;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
 {
@@ -19,17 +20,30 @@ namespace My.JDownloader.Api.Namespaces
         }
 
         /// <summary>
-        /// Adds a download link to the given device.
+        /// Aborts the linkgrabber process.
         /// </summary>
-        /// <param name="requestObject">Contains informations like the link itself or the priority. If you want to use multiple links sperate them with an ';' char.</param>
-        public bool AddLinks(AddLinkRequestObject requestObject)
+        /// <returns>True if successfull.</returns>
+        public bool Abort()
         {
-            requestObject.Links.Replace(";", "\\r\\n");
-            string json = JsonConvert.SerializeObject(requestObject);
-            var param = new[] { json };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/addLinks",
-                param, JDownloaderHandler.LoginObject,true);
-            return response != null;
+            return Abort(-1);
+        }
+
+        /// <summary>
+        /// Aborts the linkgrabber process for a specific job.
+        /// </summary>
+        /// <param name="jobID">The jobId you wnat to abort.</param>
+        /// <returns>True if successfull.</returns>
+        public bool Abort(long jobID)
+        {
+            var param = new[] {jobID};
+            if (jobID == -1)
+                param = null;
+
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/abort",
+                param, JDownloaderHandler.LoginObject, true);
+
+
+            return (bool)response?.Data;
         }
 
         /// <summary>
@@ -53,7 +67,57 @@ namespace My.JDownloader.Api.Namespaces
         }
 
         /// <summary>
-        /// Clears the linkcollector list.
+        /// Adds a download link to the given device.
+        /// </summary>
+        /// <param name="requestObject">Contains informations like the link itself or the priority. If you want to use multiple links sperate them with an ';' char.</param>
+        public bool AddLinks(AddLinkRequestObject requestObject)
+        {
+            requestObject.Links.Replace(";", "\\r\\n");
+            string json = JsonConvert.SerializeObject(requestObject);
+            var param = new[] { json };
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/addLinks",
+                param, JDownloaderHandler.LoginObject,true);
+            return response != null;
+        }
+
+        /// <summary>
+        /// Adds a variant copy of the link.
+        /// </summary>
+        /// <param name="linkId">The link id you want to copy.</param>
+        /// <param name="destinationAfterLinkId"></param>
+        /// <param name="destinationPackageId"></param>
+        /// <param name="variantId"></param>
+        /// <returns>True if successfull.</returns>
+        public bool AddVariantCopy(long linkId, long destinationAfterLinkId, long destinationPackageId,
+            string variantId)
+        {
+            var param = new[] { linkId.ToString(), destinationAfterLinkId.ToString(), destinationPackageId.ToString(), variantId };
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/addVariantCopy",
+                param, JDownloaderHandler.LoginObject, true);
+            return response != null;
+        }
+
+        /// <summary>
+        /// Cleans up the downloader list.
+        /// </summary>
+        /// <param name="linkIds">Ids of the link you may want to clear.</param>
+        /// <param name="packageIds">Ids of the packages you may want to clear.</param>
+        /// <param name="action">The action type.</param>
+        /// <param name="mode">The mode type.</param>
+        /// <param name="selection">The selection Type.</param>
+        /// <returns>True if successfull.</returns>
+        public bool CleanUp(long[] linkIds, long[] packageIds, CleanUpActionType action, CleanUpModeType mode, CleanUpSelectionType selection)
+        {
+            var param = new object[] { linkIds, packageIds, action, mode, selection };
+            var response =
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/cleanUp", param, JDownloaderHandler.LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Clears the downloader list.
         /// </summary>
         /// <returns>True if successfull</returns>
         public bool ClearList()
@@ -63,6 +127,57 @@ namespace My.JDownloader.Api.Namespaces
             if (response == null)
                 return false;
             return true;
+        }
+
+        /// <summary>
+        /// Not documented what it really does.
+        /// </summary>
+        /// <param name="structureWatermark"></param>
+        /// <returns></returns>
+        public long GetChildrenChanged(long structureWatermark)
+        {
+            var response =
+                _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getChildrenChanged", null, JDownloaderHandler.LoginObject);
+
+            if (response?.Data != null)
+                return (long) response.Data;
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets the selection base of the download folder history.
+        /// </summary>
+        /// <returns>An array which contains the download folder history.</returns>
+        public string[] GetDownloadFolderHistorySelectionBase()
+        {
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getDownloadFolderHistorySelectionBase", null, JDownloaderHandler.LoginObject);
+
+            var tmp = (JArray) response?.Data;
+            return tmp?.ToObject<string[]>();
+        }
+
+        /// <summary>
+        /// Gets the stop mark as long.
+        /// </summary>
+        /// <returns>The stop mark as long.</returns>
+        public long GetStopMark()
+        {
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
+            if (response?.Data == null)
+                return -1;
+
+            return (long)response.Data;
+        }
+
+        /// <summary>
+        /// Gets informations about a stop marked link.
+        /// </summary>
+        /// <returns>Returns informations about a stop marked link.</returns>
+        public StopMarkedLinkReturnObject GetStopMarkedLink()
+        {
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
+
+            return (StopMarkedLinkReturnObject) response?.Data;
         }
 
         /// <summary>
