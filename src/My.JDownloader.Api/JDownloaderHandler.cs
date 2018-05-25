@@ -21,14 +21,7 @@ namespace My.JDownloader.Api
 
         
         private readonly JDownloaderApiHandler _ApiHandler = new JDownloaderApiHandler();
-
-        public AccountsV2 AccountsV2;
-        public DownloadController DownloadController;
-        public Extensions Extensions;
-        public Extraction Extraction;
-        public LinkgrabberV2 LinkgrabberV2;
-        public Update Update;
-
+        
         public JDownloaderHandler()
         {
             InitializeClasses();

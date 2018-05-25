@@ -71,7 +71,10 @@ So far the library contains the following namespaces and methods:
 	- Uptime() : long
 	- Version() : long
 	
-- LinkgrabberV2 | 8/30 calls done
+- LinkCrawler | 1/1 calls done
+    - IsCrawling() : boolean
+    
+- LinkGrabberV2 | 8/30 calls done
     - AddLinks(AddLinkRequestObject) : boolean
     - AddContainer(containerType, content) : boolean
     - ClearList() : boolean
@@ -81,6 +84,9 @@ So far the library contains the following namespaces and methods:
 	- QueryPackages(QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
 	- SetDownloadDirectory(directory, packageIds[]) : boolean
 	
+- System | 7/7 calls done
+    
+
 - Update | 3/3 calls done
 	- IsUpdateAvailable() : boolean
 	- RestartAndUpdate()

@@ -95,35 +95,42 @@ namespace My.JDownloader.Api.ApiHandler
 
         private string PostMethod(string url, string body = "", byte[] ivKey = null)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                if (!string.IsNullOrEmpty(body))
+                using (var httpClient = new HttpClient())
                 {
-                    StringContent content = new StringContent(body, Encoding.UTF8, "application/aesjson-jd");
-                    using (var response = httpClient.PostAsync(url, content).Result)
+                    if (!string.IsNullOrEmpty(body))
                     {
-                        if (response != null)
+                        StringContent content = new StringContent(body, Encoding.UTF8, "application/aesjson-jd");
+                        using (var response = httpClient.PostAsync(url, content).Result)
                         {
-                            return response.Content.ReadAsStringAsync().Result;
+                            if (response != null)
+                            {
+                                return response.Content.ReadAsStringAsync().Result;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (var response = httpClient.GetAsync(url).Result)
+                        {
+                            if (response.StatusCode != HttpStatusCode.OK)
+                                return null;
+                            string result = response.Content.ReadAsStringAsync().Result;
+                            if (ivKey != null)
+                            {
+                                result = Decrypt(result, ivKey);
+                            }
+                            return result;
                         }
                     }
                 }
-                else
-                {
-                    using (var response = httpClient.GetAsync(url).Result)
-                    {
-                        if (response.StatusCode != HttpStatusCode.OK)
-                            return null;
-                        string result = response.Content.ReadAsStringAsync().Result;
-                        if (ivKey != null)
-                        {
-                            result = Decrypt(result, ivKey);
-                        }
-                        return result;
-                    }
-                }
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         #region "Encrypt, Decrypt and Signature"

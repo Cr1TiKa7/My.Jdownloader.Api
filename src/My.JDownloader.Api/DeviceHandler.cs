@@ -12,8 +12,8 @@ namespace My.JDownloader.Api
 {
     public class DeviceHandler
     {
-        private DeviceObject _Device;
-        private JDownloaderApiHandler _ApiHandler;
+        private readonly DeviceObject _Device;
+        private readonly JDownloaderApiHandler _ApiHandler;
         
         private LoginObject _LoginObject;
 
@@ -26,9 +26,11 @@ namespace My.JDownloader.Api
         public DownloadController DownloadController;
         public Extensions Extensions;
         public Extraction Extraction;
-        public LinkgrabberV2 LinkgrabberV2;
+        public LinkCrawler LinkCrawler;
+        public LinkGrabberV2 LinkgrabberV2;
         public Update Update;
         public JD Jd;
+        public Namespaces.System System;
 
         internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject LoginObject)
         {
@@ -40,9 +42,11 @@ namespace My.JDownloader.Api
             DownloadController = new DownloadController(_ApiHandler, _Device);
             Extensions = new Extensions(_ApiHandler, _Device);
             Extraction = new Extraction(_ApiHandler, _Device);
-            LinkgrabberV2 = new LinkgrabberV2(_ApiHandler, _Device);
+            LinkCrawler = new LinkCrawler(_ApiHandler, _Device);
+            LinkgrabberV2 = new LinkGrabberV2(_ApiHandler, _Device);
             Update = new Update(_ApiHandler, _Device);
             Jd = new JD(_ApiHandler, _Device);
+            System = new Namespaces.System(_ApiHandler, _Device);
             DirectConnect();
         }
 
@@ -74,7 +78,7 @@ namespace My.JDownloader.Api
             //Creating the query for the connection request
             string connectQueryUrl =
                 $"/my/connect?email={HttpUtility.UrlEncode(_LoginObject.Email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
-
+            _ApiHandler.SetApiUrl(apiUrl);
             //Calling the query
             var response = _ApiHandler.CallServer<LoginObject>(connectQueryUrl, _LoginSecret);
 

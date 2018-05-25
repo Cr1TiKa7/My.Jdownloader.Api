@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 
 namespace My.JDownloader.Api.Namespaces
 {
-    public class LinkgrabberV2
+    public class LinkGrabberV2
     {
         private readonly JDownloaderApiHandler _ApiHandler;
         private readonly DeviceObject _Device;
 
-        internal LinkgrabberV2(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal LinkGrabberV2(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
             _ApiHandler = apiHandler;
             _Device = device;
