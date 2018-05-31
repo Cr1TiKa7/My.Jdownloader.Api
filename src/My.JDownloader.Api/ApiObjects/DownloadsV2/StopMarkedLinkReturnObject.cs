@@ -1,4 +1,6 @@
-﻿namespace My.JDownloader.Api.ApiObjects.LinkgrabberV2
+﻿using My.JDownloader.Api.ApiObjects.LinkgrabberV2;
+
+namespace My.JDownloader.Api.ApiObjects.DownloadsV2
 {
     public class StopMarkedLinkReturnObject
     {

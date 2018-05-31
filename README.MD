@@ -51,6 +51,10 @@ So far the library contains the following namespaces and methods:
     - Pause(pause) : boolean
     - GetCurrentState() : string
 	- GetSpeedInBps() : long
+
+- DownloadsV2 | 2/x calls done
+	- GetStopMark() : long
+	- GetStopMarkedLink() : StopMarkedLinkReturnObject
 	
 - Extensions | 5/5 calls done
 	- Install(extensionId) : boolean
@@ -74,7 +78,7 @@ So far the library contains the following namespaces and methods:
 - LinkCrawler | 1/1 calls done
     - IsCrawling() : boolean
     
-- LinkGrabberV2 | 13/30 calls done
+- LinkGrabberV2 | 19/30 calls done
 	- Abort() : boolean
 	- Abort(jobId) : boolean
     - AddLinks(AddLinkRequestObject) : boolean
@@ -83,9 +87,14 @@ So far the library contains the following namespaces and methods:
 	- CleanUp(linkIds, packageIds, action, mode, selection) : boolean
 	- GetChildrenChanged(structureWatermark) : long
 	- GetDownloadFolderHistorySelectionBase() : string[]
-	- GetStopMarkedLink() : StopMarkedLinkReturnObject
+	- GetDownloadUrls(linkIds, afterLinkId, destPackageId) : Dictionary<string, List<long>>
     - GetPackageCount() : int
+	- GetVariants(linkId) : GetVariantsReturnObject[]
     - IsCollecting() : boolean
+	- MoveLinks(linkIds, afterLinkId, destPackageId) : boolean
+	- MovePackages(packageIds, afterDestPackageId) : boolean
+	- MoveToDownloadList(linkIds, packageIds) : boolean
+	- MoveToNewPackage(linkIds, packageIds, newPackageName, downloadPath) : boolean
     - QueryLinks(maxResults) : QueryLinksResponseObject
 	- QueryPackages(QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
 	- SetDownloadDirectory(directory, packageIds[]) : boolean

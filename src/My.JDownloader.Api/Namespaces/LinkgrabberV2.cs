@@ -43,7 +43,7 @@ namespace My.JDownloader.Api.Namespaces
                 param, JDownloaderHandler.LoginObject, true);
 
 
-            return (bool)response?.Data;
+            return (bool) response?.Data;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace My.JDownloader.Api.Namespaces
             };
 
             string json = JsonConvert.SerializeObject(containerObject);
-            var param = new[] { json };
+            var param = new[] {json};
             var response = _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/addContainer",
                 param, JDownloaderHandler.LoginObject);
             return response != null;
@@ -74,9 +74,9 @@ namespace My.JDownloader.Api.Namespaces
         {
             requestObject.Links.Replace(";", "\\r\\n");
             string json = JsonConvert.SerializeObject(requestObject);
-            var param = new[] { json };
+            var param = new[] {json};
             var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/addLinks",
-                param, JDownloaderHandler.LoginObject,true);
+                param, JDownloaderHandler.LoginObject, true);
             return response != null;
         }
 
@@ -91,7 +91,8 @@ namespace My.JDownloader.Api.Namespaces
         public bool AddVariantCopy(long linkId, long destinationAfterLinkId, long destinationPackageId,
             string variantId)
         {
-            var param = new[] { linkId.ToString(), destinationAfterLinkId.ToString(), destinationPackageId.ToString(), variantId };
+            var param = new[]
+                {linkId.ToString(), destinationAfterLinkId.ToString(), destinationPackageId.ToString(), variantId};
             var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/addVariantCopy",
                 param, JDownloaderHandler.LoginObject, true);
             return response != null;
@@ -106,11 +107,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <param name="mode">The mode type.</param>
         /// <param name="selection">The selection Type.</param>
         /// <returns>True if successfull.</returns>
-        public bool CleanUp(long[] linkIds, long[] packageIds, CleanUpActionType action, CleanUpModeType mode, CleanUpSelectionType selection)
+        public bool CleanUp(long[] linkIds, long[] packageIds, CleanUpActionType action, CleanUpModeType mode,
+            CleanUpSelectionType selection)
         {
-            var param = new object[] { linkIds, packageIds, action, mode, selection };
+            var param = new object[] {linkIds, packageIds, action, mode, selection};
             var response =
-                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/cleanUp", param, JDownloaderHandler.LoginObject);
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/cleanUp", param,
+                    JDownloaderHandler.LoginObject);
             if (response == null)
                 return false;
             return true;
@@ -123,7 +126,8 @@ namespace My.JDownloader.Api.Namespaces
         public bool ClearList()
         {
             var response =
-                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/clearList", null, JDownloaderHandler.LoginObject);
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/clearList", null,
+                    JDownloaderHandler.LoginObject);
             if (response == null)
                 return false;
             return true;
@@ -137,7 +141,8 @@ namespace My.JDownloader.Api.Namespaces
         public long GetChildrenChanged(long structureWatermark)
         {
             var response =
-                _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getChildrenChanged", null, JDownloaderHandler.LoginObject);
+                _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getChildrenChanged", null,
+                    JDownloaderHandler.LoginObject);
 
             if (response?.Data != null)
                 return (long) response.Data;
@@ -150,34 +155,28 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An array which contains the download folder history.</returns>
         public string[] GetDownloadFolderHistorySelectionBase()
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getDownloadFolderHistorySelectionBase", null, JDownloaderHandler.LoginObject);
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device,
+                "/linkgrabberv2/getDownloadFolderHistorySelectionBase", null, JDownloaderHandler.LoginObject);
 
             var tmp = (JArray) response?.Data;
             return tmp?.ToObject<string[]>();
         }
 
+        // TODO: Describe what this function does.
         /// <summary>
-        /// Gets the stop mark as long.
+        /// 
         /// </summary>
-        /// <returns>The stop mark as long.</returns>
-        public long GetStopMark()
+        /// <param name="links"></param>
+        /// <param name="afterLinkId"></param>
+        /// <param name="destPackageId"></param>
+        /// <returns></returns>
+        public Dictionary<string, List<long>> GetDownloadUrls(long[] links, long afterLinkId, long destPackageId)
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
-            if (response?.Data == null)
-                return -1;
+            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getDownloadUrls", null,
+                JDownloaderHandler.LoginObject);
 
-            return (long)response.Data;
-        }
-
-        /// <summary>
-        /// Gets informations about a stop marked link.
-        /// </summary>
-        /// <returns>Returns informations about a stop marked link.</returns>
-        public StopMarkedLinkReturnObject GetStopMarkedLink()
-        {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
-
-            return (StopMarkedLinkReturnObject) response?.Data;
+            var tmp = (JObject) response?.Data;
+            return tmp?.ToObject<Dictionary<string, List<long>>>();
         }
 
         /// <summary>
@@ -187,10 +186,26 @@ namespace My.JDownloader.Api.Namespaces
         public int GetPackageCount()
         {
             var response =
-                _ApiHandler.CallAction<dynamic>(_Device, "/linkgrabberv2/getPackageCount", null, JDownloaderHandler.LoginObject, true);
+                _ApiHandler.CallAction<dynamic>(_Device, "/linkgrabberv2/getPackageCount", null,
+                    JDownloaderHandler.LoginObject, true);
             if (response == null)
                 return 0;
             return response.data;
+        }
+
+        /// <summary>
+        /// Gets variants of the link.
+        /// </summary>
+        /// <param name="linkId">The link id you want to get the variants of.</param>
+        /// <returns>Returns variants of this link.</returns>
+        public GetVariantsReturnObject[] GetVariants(long linkId)
+        {
+            var response =
+                _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getVariants", null,
+                    JDownloaderHandler.LoginObject);
+
+            var tmp = (JArray) response?.Data;
+            return tmp?.ToObject<GetVariantsReturnObject[]>();
         }
 
         /// <summary>
@@ -200,7 +215,83 @@ namespace My.JDownloader.Api.Namespaces
         public bool IsCollecting()
         {
             var response =
-                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/isCollection", null, JDownloaderHandler.LoginObject);
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/isCollection", null,
+                    JDownloaderHandler.LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Moves one or multiple links after another link or inside a package.
+        /// </summary>
+        /// <param name="linkIds">The ids of the links you want to move.</param>
+        /// <param name="afterLinkId">The id of the link you want to move the other links to.</param>
+        /// <param name="destPackageId">The id of the package where you want to add the links to.</param>
+        /// <returns>True if successfull.</returns>
+        public bool MoveLinks(long[] linkIds, long afterLinkId, long destPackageId)
+        {
+            var param = new object[] {linkIds, afterLinkId, destPackageId};
+
+            var response =
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/moveLinks", param,
+                    JDownloaderHandler.LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Moves one or multiple packages after antoher package.
+        /// </summary>
+        /// <param name="packageIds">The ids of the packages you want to move.</param>
+        /// <param name="afterDestPackageId">The id of the package you want to move the others to.</param>
+        /// <returns>True if successfull.</returns>
+        public bool MovePackages(long[] packageIds, long afterDestPackageId)
+        {
+            var param = new object[] {packageIds, afterDestPackageId};
+
+            var response =
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/movePackages", param,
+                    JDownloaderHandler.LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Moves one or multiple links/packages to the download list.
+        /// </summary>
+        /// <param name="linkIds">The ids of the links you want to move.</param>
+        /// <param name="packageIds">The ids of the packages you want to move.</param>
+        /// <returns>True if successfull.</returns>
+        public bool MoveToDownloadlist(long[] linkIds, long[] packageIds)
+        {
+            var param = new[] {linkIds, packageIds};
+
+            var response =
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/moveToDownloadlist", param,
+                    JDownloaderHandler.LoginObject);
+            if (response == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Move one or multiple links/packages to a new package.
+        /// </summary>
+        /// <param name="linkIds">The ids of the links you want to move.</param>
+        /// <param name="packageIds">The ids of the packages you want to move.</param>
+        /// <param name="newPackageName">The name of the new package.</param>
+        /// <param name="downloadPath">The download path.</param>
+        /// <returns>True if successfull.</returns>
+        public bool MoveToNewPackage(long[] linkIds, long[] packageIds, string newPackageName, string downloadPath)
+        {
+            var param = new object[] { linkIds, packageIds, newPackageName,downloadPath };
+
+            var response =
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/moveToNewPackage", param,
+                    JDownloaderHandler.LoginObject);
             if (response == null)
                 return false;
             return true;
@@ -211,7 +302,7 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="maxResults">Maximum number of return values.</param>
         /// <returns>Returns a list of all links that are currently in the linkcollector list.</returns>
-        public List<QueryLinksResponseObject> QueryLinks( int maxResults = -1)
+        public List<QueryLinksResponseObject> QueryLinks(int maxResults = -1)
         {
             QueryLinksObject queryLink = new QueryLinksObject
             {
@@ -222,10 +313,11 @@ namespace My.JDownloader.Api.Namespaces
                 queryLink.MaxResults = maxResults;
 
             string json = JsonConvert.SerializeObject(queryLink);
-            var param = new[] { json };
+            var param = new[] {json};
 
             var response =
-                _ApiHandler.CallAction<CrawledLinkObject>(_Device, "/linkgrabberv2/queryLinks", param, JDownloaderHandler.LoginObject, true);
+                _ApiHandler.CallAction<CrawledLinkObject>(_Device, "/linkgrabberv2/queryLinks", param,
+                    JDownloaderHandler.LoginObject, true);
             return response?.Data;
         }
 
@@ -234,13 +326,14 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="requestObject">The request object which contains properties to define the return properties.</param>
         /// <returns>Returns a list of all available packages.</returns>
-        public List<QueryPackagesResponseObject> QueryPackages( QueryPackagesRequestObject requestObject)
+        public List<QueryPackagesResponseObject> QueryPackages(QueryPackagesRequestObject requestObject)
         {
             string json = JsonConvert.SerializeObject(requestObject);
             var param = new[] {json};
 
             var response =
-                _ApiHandler.CallAction<QueryPackagesObject>(_Device, "/linkgrabberv2/queryPackages", param, JDownloaderHandler.LoginObject, true);
+                _ApiHandler.CallAction<QueryPackagesObject>(_Device, "/linkgrabberv2/queryPackages", param,
+                    JDownloaderHandler.LoginObject, true);
             return response?.Data;
         }
 
@@ -254,7 +347,8 @@ namespace My.JDownloader.Api.Namespaces
         {
             var param = new object[] {directory, packageIds};
             var response =
-                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/setDownloadDirectory", param, JDownloaderHandler.LoginObject,true);
+                _ApiHandler.CallAction<object>(_Device, "/linkgrabberv2/setDownloadDirectory", param,
+                    JDownloaderHandler.LoginObject, true);
             return response != null;
         }
     }
