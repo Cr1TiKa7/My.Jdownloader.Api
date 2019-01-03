@@ -101,7 +101,7 @@ namespace My.JDownloader.Api
         {
             var tmp = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/device/getDirectConnectionInfos",
                 null, _LoginObject, true);
-            if (string.IsNullOrEmpty(tmp.Data.ToString()))
+            if (tmp.Data == null || string.IsNullOrEmpty(tmp.Data.ToString()))
                 return new List<DeviceConnectionInfoObject>();
 
             var jobj = (JObject) tmp.Data;
