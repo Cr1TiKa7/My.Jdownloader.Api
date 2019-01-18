@@ -14,7 +14,7 @@ First of all you need an instance of the JDownloaderHandler
 JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURAPPKEY");
 _jdownloaderHandler.Connect("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
 //Alternaitve
-JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
+JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD", "YOURAPPKEY");
 ```
 
 The JDownloaderHandler contains the following methods:
