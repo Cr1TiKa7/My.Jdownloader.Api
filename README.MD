@@ -11,7 +11,7 @@ Currently it supports: .NET 4.0, .NET 4.5, .NET 4.6 and .NETCore 2.0
 
 First of all you need an instance of the JDownloaderHandler
 ``` c#
-JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler();
+JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURAPPKEY");
 _jdownloaderHandler.Connect("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
 //Alternaitve
 JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
@@ -118,7 +118,7 @@ So far the library contains the following namespaces and methods:
 Here is a simple sample code which shows you how to connect, get a device handler and how to call a method:
 
 ``` c#
-JDownloaderHandler _JDownloaderHandler = new JDownloaderHandler("YOUREMAIL","YOURPASSWORD");
+JDownloaderHandler _JDownloaderHandler = new JDownloaderHandler("YOUREMAIL","YOURPASSWORD", "YOURAPPKEY");
 if (_JDownloaderHandler.IsConnected)
 {
     var devices = _JDownloaderHandler.GetDevices();
