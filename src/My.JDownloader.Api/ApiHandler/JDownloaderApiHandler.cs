@@ -16,15 +16,15 @@ namespace My.JDownloader.Api.ApiHandler
 {
     public class JDownloaderApiHandler
     {
-        private int _RequestId = (int) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-        private string _ApiUrl = "http://api.jdownloader.org";
+        private int _requestId = (int) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+        private string _apiUrl = "http://api.jdownloader.org";
 
 
         internal JDownloaderApiHandler() { }
 
         public void SetApiUrl(string newApiUrl)
         {
-            _ApiUrl = newApiUrl;
+            _apiUrl = newApiUrl;
         }
 
         public T CallServer<T>(string query, byte[] key, string param = "")
@@ -36,7 +36,7 @@ namespace My.JDownloader.Api.ApiHandler
                 {
                     param = Encrypt(param, key);
                 }
-                rid = _RequestId.ToString();
+                rid = _requestId.ToString();
             }
             else
             {
@@ -50,7 +50,7 @@ namespace My.JDownloader.Api.ApiHandler
             string signature = GetSignature(query, key);
             query += "&signature=" + signature;
 
-            string url = _ApiUrl + query;
+            string url = _apiUrl + query;
             if (!string.IsNullOrWhiteSpace(param))
                 param = string.Empty;
             string response = PostMethod(url, param, key);
@@ -63,7 +63,7 @@ namespace My.JDownloader.Api.ApiHandler
             bool decryptResponse = false)
         {
             if (device == null)
-                throw new ArgumentNullException("The device can't be null.");
+                throw new ArgumentNullException(nameof(device));
             if (string.IsNullOrEmpty(device.Id))
                 throw new ArgumentException(
                     "The id of the device is empty. Please call again the GetDevices Method and try again.");
@@ -78,7 +78,7 @@ namespace My.JDownloader.Api.ApiHandler
                 Url = action
             };
 
-            string url = _ApiUrl + query;
+            string url = _apiUrl + query;
             string json = JsonConvert.SerializeObject(callActionObject);
             json = Encrypt(json, loginObject.DeviceEncryptionToken);
             string response = PostMethod(url,
@@ -130,7 +130,7 @@ namespace My.JDownloader.Api.ApiHandler
                 }
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -235,7 +235,7 @@ namespace My.JDownloader.Api.ApiHandler
 
         private int GetUniqueRid()
         {
-            return _RequestId++;
+            return _requestId++;
         }
     }
 }

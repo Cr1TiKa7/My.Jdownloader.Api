@@ -28,8 +28,21 @@ The JDownloaderHandler contains the following methods:
 For a better overview, the calls are split into different namespaces.
 So far the library contains the following namespaces and methods:
 
+- Accounts | 11/12 calls done
+	- AddAccount(hoster, email, password) : boolean
+    - DisableAccounts(accountIds) : boolean
+    - EnableAccounts(accountIds) : boolean
+	- GetAccountInfo(accountId) : Account
+	- GetPremiumHosterUrl(hoster) : string
+	- ListPremiumHoster() : string[]
+    - ListPremiumHosterUrls() : Dictionary<string, string>
+	- QueryAccounts(apiQuery) : IEnumerable<Account>
+	- RemoveAccounts(accountIds) : boolean 
+	- SetEnabledStatus(enabled, accountIds) : boolean 
+	- UpdateAccount(accountId, username, password) : boolean
+	
 - AccountsV2 | 14/14 calls done
-    - AddAccount(email, password) : boolean
+    - AddAccount(hoster, email, password) : boolean
 	- AddBasicAuth(BasicAuthObject) : boolean
     - DisableAccounts(accountIds) : boolean
     - EnableAccounts(accountIds) : boolean

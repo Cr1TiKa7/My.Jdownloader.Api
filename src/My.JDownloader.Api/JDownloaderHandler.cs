@@ -8,15 +8,15 @@ namespace My.JDownloader.Api
 {
     public class JDownloaderHandler
     {
-        public bool IsConnected { get; set; } = false;
+        public bool IsConnected { get; set; }
 
         internal static LoginObject LoginObject;
 
-        private byte[] _LoginSecret;
-        private byte[] _DeviceSecret;
+        private byte[] _loginSecret;
+        private byte[] _deviceSecret;
 
         
-        private readonly JDownloaderApiHandler _ApiHandler = new JDownloaderApiHandler();
+        private readonly JDownloaderApiHandler _apiHandler = new JDownloaderApiHandler();
         
         /// <summary>
         /// 
@@ -42,12 +42,12 @@ namespace My.JDownloader.Api
 
         private void InitializeClasses()
         {
-            //AccountsV2 = new AccountsV2(_ApiHandler);
-            //DownloadController = new DownloadController(_ApiHandler);
-            //Extensions = new Extensions(_ApiHandler);
-            //Extraction = new Extraction(_ApiHandler);
-            //LinkgrabberV2 = new LinkgrabberV2(_ApiHandler);
-            //Update = new Update(_ApiHandler);
+            //AccountsV2 = new AccountsV2(_apiHandler);
+            //DownloadController = new DownloadController(_apiHandler);
+            //Extensions = new Extensions(_apiHandler);
+            //Extraction = new Extraction(_apiHandler);
+            //LinkgrabberV2 = new LinkgrabberV2(_apiHandler);
+            //Update = new Update(_apiHandler);
         }
 
         #region "Connection methods"
@@ -61,15 +61,15 @@ namespace My.JDownloader.Api
         public bool Connect(string email, string password)
         {
             //Calculating the Login and Device secret
-            _LoginSecret = Utils.GetSecret(email, password, Utils.ServerDomain);
-            _DeviceSecret = Utils.GetSecret(email, password, Utils.DeviceDomain);
+            _loginSecret = Utils.GetSecret(email, password, Utils.ServerDomain);
+            _deviceSecret = Utils.GetSecret(email, password, Utils.DeviceDomain);
 
             //Creating the query for the connection request
             string connectQueryUrl =
                 $"/my/connect?email={HttpUtility.UrlEncode(email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
 
             //Calling the query
-            var response = _ApiHandler.CallServer<LoginObject>(connectQueryUrl, _LoginSecret);
+            var response = _apiHandler.CallServer<LoginObject>(connectQueryUrl, _loginSecret);
 
             //If the response is null the connection was not successfull
             if (response == null)
@@ -79,8 +79,8 @@ namespace My.JDownloader.Api
             LoginObject = response;
             LoginObject.Email = email;
             LoginObject.Password = password;
-            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
-            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
+            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_loginSecret, LoginObject.SessionToken);
+            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_deviceSecret, LoginObject.SessionToken);
             IsConnected = true;
             return true;
         }
@@ -93,13 +93,13 @@ namespace My.JDownloader.Api
         {
             string query =
                 $"/my/reconnect?appkey{HttpUtility.UrlEncode(Utils.AppKey)}&sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}&regaintoken={HttpUtility.UrlEncode(LoginObject.RegainToken)}";
-            var response = _ApiHandler.CallServer<LoginObject>(query, LoginObject.ServerEncryptionToken);
+            var response = _apiHandler.CallServer<LoginObject>(query, LoginObject.ServerEncryptionToken);
             if (response == null)
                 return false;
 
             LoginObject = response;
-            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_LoginSecret, LoginObject.SessionToken);
-            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_DeviceSecret, LoginObject.SessionToken);
+            LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_loginSecret, LoginObject.SessionToken);
+            LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_deviceSecret, LoginObject.SessionToken);
             IsConnected = true;
             return IsConnected;
         }
@@ -111,7 +111,7 @@ namespace My.JDownloader.Api
         public bool Disconnect()
         {
             string query = $"/my/disconnect?sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}";
-            var response = _ApiHandler.CallServer<object>(query, LoginObject.ServerEncryptionToken);
+            var response = _apiHandler.CallServer<object>(query, LoginObject.ServerEncryptionToken);
             if (response == null)
                 return false;
 
@@ -129,7 +129,7 @@ namespace My.JDownloader.Api
         {
             List<DeviceObject> devices = new List<DeviceObject>();
             string query = $"/my/listdevices?sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}";
-            var response = _ApiHandler.CallServer<DeviceJsonReturnObject>(query, LoginObject.ServerEncryptionToken);
+            var response = _apiHandler.CallServer<DeviceJsonReturnObject>(query, LoginObject.ServerEncryptionToken);
             if (response == null)
                 return devices;
 
@@ -152,9 +152,9 @@ namespace My.JDownloader.Api
             if (IsConnected)
             {
                 //TODO: Make it possible to directly connect to the jdownloader client. If it's not working use the relay server.
-                //var tmp = _ApiHandler.CallAction<DefaultReturnObject>(device, "/device/getDirectConnectionInfos",
+                //var tmp = _apiHandler.CallAction<DefaultReturnObject>(device, "/device/getDirectConnectionInfos",
                 //    null, LoginObject, true);
-                return new DeviceHandler(device, _ApiHandler, LoginObject);
+                return new DeviceHandler(device, _apiHandler, LoginObject);
             }
             return null;
         }

@@ -74,7 +74,6 @@ namespace My.JDownloader.Api.Namespaces
             JArray tmp = (JArray)response.Data;
 
             return tmp.ToObject<IEnumerable<ExtensionResponseObject>>();
-
         }
 
         /// <summary>

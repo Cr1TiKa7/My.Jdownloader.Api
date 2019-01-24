@@ -12,16 +12,17 @@ namespace My.JDownloader.Api
 {
     public class DeviceHandler
     {
-        private readonly DeviceObject _Device;
-        private readonly JDownloaderApiHandler _ApiHandler;
+        private readonly DeviceObject _device;
+        private readonly JDownloaderApiHandler _apiHandler;
         
-        private LoginObject _LoginObject;
+        private LoginObject _loginObject;
 
-        private byte[] _LoginSecret;
-        private byte[] _DeviceSecret;
+        private byte[] _loginSecret;
+        private byte[] _deviceSecret;
 
         public bool IsConnected;
 
+        public Accounts Accounts;
         public AccountsV2 AccountsV2;
         public DownloadController DownloadController;
         public Extensions Extensions;
@@ -32,21 +33,21 @@ namespace My.JDownloader.Api
         public Jd Jd;
         public Namespaces.System System;
 
-        internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject LoginObject)
+        internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject loginObject)
         {
-            _Device = device;
-            _ApiHandler = apiHandler;
-            _LoginObject = LoginObject;
+            _device = device;
+            _apiHandler = apiHandler;
+            _loginObject = loginObject;
 
-            AccountsV2 = new AccountsV2(_ApiHandler, _Device);
-            DownloadController = new DownloadController(_ApiHandler, _Device);
-            Extensions = new Extensions(_ApiHandler, _Device);
-            Extraction = new Extraction(_ApiHandler, _Device);
-            LinkCrawler = new LinkCrawler(_ApiHandler, _Device);
-            LinkgrabberV2 = new LinkGrabberV2(_ApiHandler, _Device);
-            Update = new Update(_ApiHandler, _Device);
-            Jd = new Jd(_ApiHandler, _Device);
-            System = new Namespaces.System(_ApiHandler, _Device);
+            AccountsV2 = new AccountsV2(_apiHandler, _device);
+            DownloadController = new DownloadController(_apiHandler, _device);
+            Extensions = new Extensions(_apiHandler, _device);
+            Extraction = new Extraction(_apiHandler, _device);
+            LinkCrawler = new LinkCrawler(_apiHandler, _device);
+            LinkgrabberV2 = new LinkGrabberV2(_apiHandler, _device);
+            Update = new Update(_apiHandler, _device);
+            Jd = new Jd(_apiHandler, _device);
+            System = new Namespaces.System(_apiHandler, _device);
             DirectConnect();
         }
 
@@ -72,35 +73,35 @@ namespace My.JDownloader.Api
         private bool Connect(string apiUrl)
         {
             //Calculating the Login and Device secret
-            _LoginSecret = Utils.GetSecret(_LoginObject.Email, _LoginObject.Password, Utils.ServerDomain);
-            _DeviceSecret = Utils.GetSecret(_LoginObject.Email, _LoginObject.Password, Utils.DeviceDomain);
+            _loginSecret = Utils.GetSecret(_loginObject.Email, _loginObject.Password, Utils.ServerDomain);
+            _deviceSecret = Utils.GetSecret(_loginObject.Email, _loginObject.Password, Utils.DeviceDomain);
 
             //Creating the query for the connection request
             string connectQueryUrl =
-                $"/my/connect?email={HttpUtility.UrlEncode(_LoginObject.Email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
-            _ApiHandler.SetApiUrl(apiUrl);
+                $"/my/connect?email={HttpUtility.UrlEncode(_loginObject.Email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
+            _apiHandler.SetApiUrl(apiUrl);
             //Calling the query
-            var response = _ApiHandler.CallServer<LoginObject>(connectQueryUrl, _LoginSecret);
+            var response = _apiHandler.CallServer<LoginObject>(connectQueryUrl, _loginSecret);
 
             //If the response is null the connection was not successfull
             if (response == null)
                 return false;
 
-            response.Email = _LoginObject.Email;
-            response.Password = _LoginObject.Password;
+            response.Email = _loginObject.Email;
+            response.Password = _loginObject.Password;
 
             //Else we are saving the response which contains the SessionToken, RegainToken and the RequestId
-            _LoginObject = response;
-            _LoginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_LoginSecret, _LoginObject.SessionToken);
-            _LoginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_DeviceSecret, _LoginObject.SessionToken);
+            _loginObject = response;
+            _loginObject.ServerEncryptionToken = Utils.UpdateEncryptionToken(_loginSecret, _loginObject.SessionToken);
+            _loginObject.DeviceEncryptionToken = Utils.UpdateEncryptionToken(_deviceSecret, _loginObject.SessionToken);
             IsConnected = true;
             return true;
         }
 
         private List<DeviceConnectionInfoObject> GetDirectConnectionInfos()
         {
-            var tmp = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/device/getDirectConnectionInfos",
-                null, _LoginObject, true);
+            var tmp = _apiHandler.CallAction<DefaultReturnObject>(_device, "/device/getDirectConnectionInfos",
+                null, _loginObject, true);
             if (tmp.Data == null || string.IsNullOrEmpty(tmp.Data.ToString()))
                 return new List<DeviceConnectionInfoObject>();
 
