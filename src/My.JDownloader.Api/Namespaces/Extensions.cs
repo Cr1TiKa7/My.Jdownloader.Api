@@ -1,21 +1,20 @@
-﻿using My.JDownloader.Api.ApiHandler;
-using My.JDownloader.Api.ApiObjects;
-using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.Extensions;
+﻿using System.Collections.Generic;
+using My.JDownloader.Api.ApiHandler;
+using My.JDownloader.Api.Models;
+using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
 {
-    public class Extensions
+    public class Extensions : Base
     {
-        private readonly JDownloaderApiHandler _ApiHandler;
-        private readonly DeviceObject _Device;
 
         internal Extensions(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
-            _ApiHandler = apiHandler;
-            _Device = device;
+            ApiHandler = apiHandler;
+            Device = device;
         }
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool Install( string extensionId)
         {
             var param = new[] {extensionId};
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extensions/install",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extensions/install",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null && (bool)response.Data;
@@ -40,7 +39,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool IsEnabled(string className)
         {
             var param = new[] { className };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extensions/isEnabled",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extensions/isEnabled",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null && (bool)response.Data;
@@ -54,7 +53,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool IsInstalled( string extensionId)
         {
             var param = new[] { extensionId };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extensions/isInstalled",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extensions/isInstalled",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null && (bool)response.Data;
@@ -64,17 +63,17 @@ namespace My.JDownloader.Api.Namespaces
         /// Gets all extensions that are available.
         /// </summary>
         /// <param name="requestObject">The request object which contains informations about which properties are returned.</param>
-        /// <returns>A list of all extensions that are available.</returns>
-        public ExtensionResponseObject[] List( ExtensionRequestObject requestObject)
+        /// <returns>An enumerable of all extensions that are available.</returns>
+        public IEnumerable<ExtensionResponseObject> List( ExtensionRequestObject requestObject)
         {
             string json = JsonConvert.SerializeObject(requestObject);
             var param = new[] { json };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extensions/list",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extensions/list",
                 param, JDownloaderHandler.LoginObject, true);
 
             JArray tmp = (JArray)response.Data;
 
-            return tmp.ToObject <ExtensionResponseObject[]>();
+            return tmp.ToObject<IEnumerable<ExtensionResponseObject>>();
 
         }
 
@@ -87,7 +86,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool SetEnabled(string className, bool enabled)
         {
             var param = new[] { className, enabled.ToString() };
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/extensions/setEnabled",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extensions/setEnabled",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null;

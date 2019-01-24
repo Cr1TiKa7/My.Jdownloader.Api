@@ -1,5 +1,4 @@
-﻿
-using My.JDownloader.Api.ApiObjects.Devices;
+﻿using My.JDownloader.Api.Models.Devices;
 
 namespace My.JDownloader.Api.Sample
 {
@@ -11,6 +10,9 @@ namespace My.JDownloader.Api.Sample
             if (jdownloaderHandler.IsConnected)
             {
                 var devices = jdownloaderHandler.GetDevices();
+                //Linq version
+                devices.ForEach(x => jdownloaderHandler.GetDeviceHandler(x).AccountsV2.AddAccount("mega.co.nz", "YOURMEAIL", "YOURPASSWORD"));
+                //Normal version
                 foreach (DeviceObject device in devices)
                 {
                     var dHandler = jdownloaderHandler.GetDeviceHandler(device);

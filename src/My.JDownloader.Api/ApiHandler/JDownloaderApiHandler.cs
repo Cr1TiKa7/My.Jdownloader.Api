@@ -6,18 +6,21 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
-using My.JDownloader.Api.ApiObjects.Action;
-using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.Login;
 using My.JDownloader.Api.Exceptions;
+using My.JDownloader.Api.Models.Action;
+using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Login;
 using Newtonsoft.Json;
 
 namespace My.JDownloader.Api.ApiHandler
 {
-    internal class JDownloaderApiHandler
+    public class JDownloaderApiHandler
     {
         private int _RequestId = (int) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
         private string _ApiUrl = "http://api.jdownloader.org";
+
+
+        internal JDownloaderApiHandler() { }
 
         public void SetApiUrl(string newApiUrl)
         {

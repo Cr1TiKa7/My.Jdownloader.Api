@@ -4,12 +4,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Cr1TiKa7</Authors>
     <Product />
-    <Description>A simple My.JDownloader Api wrapper</Description>
+    <Description>A simple My.JDownloader Api wrapper for c# written by Cr1TiKa7</Description>
     <Copyright>Cr1TiKa7 ©2018</Copyright>
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>

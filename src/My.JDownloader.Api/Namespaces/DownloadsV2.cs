@@ -1,19 +1,17 @@
 ﻿using My.JDownloader.Api.ApiHandler;
-using My.JDownloader.Api.ApiObjects;
-using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.DownloadsV2;
+using My.JDownloader.Api.Models;
+using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.DownloadsV2;
 
 namespace My.JDownloader.Api.Namespaces
 {
-    public class DownloadsV2
+    public class DownloadsV2 : Base
     {
-        private readonly JDownloaderApiHandler _ApiHandler;
-        private readonly DeviceObject _Device;
 
         internal DownloadsV2(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
-            _ApiHandler = apiHandler;
-            _Device = device;
+            ApiHandler = apiHandler;
+            Device = device;
         }
 
         /// <summary>
@@ -22,7 +20,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>The stop mark as long.</returns>
         public long GetStopMark()
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
             if (response?.Data == null)
                 return -1;
 
@@ -35,7 +33,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns informations about a stop marked link.</returns>
         public StopMarkedLinkReturnObject GetStopMarkedLink()
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
 
             return (StopMarkedLinkReturnObject)response?.Data;
         }

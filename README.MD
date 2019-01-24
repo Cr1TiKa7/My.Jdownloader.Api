@@ -11,10 +11,10 @@ Currently it supports: .NET 4.0, .NET 4.5, .NET 4.6 and .NETCore 2.0
 
 First of all you need an instance of the JDownloaderHandler
 ``` c#
-JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler();
+JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURAPPKEY");
 _jdownloaderHandler.Connect("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
 //Alternaitve
-JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD");
+JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD", "YOURAPPKEY");
 ```
 
 The JDownloaderHandler contains the following methods:
@@ -34,8 +34,8 @@ So far the library contains the following namespaces and methods:
     - DisableAccounts(accountIds) : boolean
     - EnableAccounts(accountIds) : boolean
 	- GetPremiumHosterUrl(hoster) : string
-    - ListAccounts(ListAccountRequestObject) : ListAccountResponseObject[]
-	- ListBasicAuth() : ListBasicAuthResponseObject[]
+    - ListAccounts(ListAccountRequestObject) : IEnumerable<ListAccountResponseObject>
+	- ListBasicAuth() : IEnumerable<ListBasicAuthResponseObject>
 	- ListPremiumHoster() : string[]
     - ListPremiumHosterUrls() : Dictionary<string, string>
     - RefreshAccounts(accountIds) : boolean
@@ -60,12 +60,17 @@ So far the library contains the following namespaces and methods:
 	- Install(extensionId) : boolean
 	- IsEnabled(className) : boolean
 	- IsInstalled(extensionId) : boolean
-	- List(ExtensionRequestObject) : ExtensionResponseObject[]
+	- List(ExtensionRequestObject) : IEnumerable<ExtensionResponseObject>
 	- SetEnabled(className, enabled) : boolean
 
-- Extraction | 2/7 calls done
+- Extraction | 7/7 calls done
 	- AddArchivePassword(password) : boolean
 	- CancelExtraction(controllerId) : boolean
+	- GetArchiveInfo(linkIds, packageIds) : IEnumerable<ArchiveStatus>
+	- GetArchiveSettings(archiveIds) : IEnumerable<ArchiveSettings>
+	- GetQueue() : IEnumerable<ArchiveStatus>
+	- SetArchiveSettings(archiveId, archiveSettings) : boolean
+	- StartExtractionNow(linkIds, packageIds) : Dictionary<string, boolean?>
 
 - JD | 6/6 calls done
 	- DoSomethingCool()
@@ -89,14 +94,14 @@ So far the library contains the following namespaces and methods:
 	- GetDownloadFolderHistorySelectionBase() : string[]
 	- GetDownloadUrls(linkIds, afterLinkId, destPackageId) : Dictionary<string, List<long>>
     - GetPackageCount() : int
-	- GetVariants(linkId) : GetVariantsReturnObject[]
+	- GetVariants(linkId) : IEnumerable<GetVariantsReturnObject>
     - IsCollecting() : boolean
 	- MoveLinks(linkIds, afterLinkId, destPackageId) : boolean
 	- MovePackages(packageIds, afterDestPackageId) : boolean
 	- MoveToDownloadList(linkIds, packageIds) : boolean
 	- MoveToNewPackage(linkIds, packageIds, newPackageName, downloadPath) : boolean
-    - QueryLinks(maxResults) : QueryLinksResponseObject
-	- QueryPackages(QueryPackagesRequestObject) : List<QueryPackagesResponseObject>
+    - QueryLinks(maxResults) : IEnumerable<QueryLinksResponseObject>
+	- QueryPackages(QueryPackagesRequestObject) : IEnumerable<QueryPackagesResponseObject>
 	- SetDownloadDirectory(directory, packageIds[]) : boolean
 	
 - System | 7/7 calls done
@@ -118,7 +123,7 @@ So far the library contains the following namespaces and methods:
 Here is a simple sample code which shows you how to connect, get a device handler and how to call a method:
 
 ``` c#
-JDownloaderHandler _JDownloaderHandler = new JDownloaderHandler("YOUREMAIL","YOURPASSWORD");
+JDownloaderHandler _JDownloaderHandler = new JDownloaderHandler("YOUREMAIL","YOURPASSWORD", "YOURAPPKEY");
 if (_JDownloaderHandler.IsConnected)
 {
     var devices = _JDownloaderHandler.GetDevices();

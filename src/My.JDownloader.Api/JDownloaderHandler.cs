@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using My.JDownloader.Api.ApiHandler;
-using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.Login;
+using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Login;
 
 namespace My.JDownloader.Api
 {

@@ -1,18 +1,16 @@
 ﻿using My.JDownloader.Api.ApiHandler;
-using My.JDownloader.Api.ApiObjects;
-using My.JDownloader.Api.ApiObjects.Devices;
+using My.JDownloader.Api.Models;
+using My.JDownloader.Api.Models.Devices;
 
 namespace My.JDownloader.Api.Namespaces
 {
-    public class Update
+    public class Update : Base
     {
-        private readonly JDownloaderApiHandler _ApiHandler;
-        private readonly DeviceObject _Device;
 
         internal Update(JDownloaderApiHandler apiHandler, DeviceObject device)
         {
-            _ApiHandler = apiHandler;
-            _Device = device;
+            ApiHandler = apiHandler;
+            Device = device;
         }
 
         /// <summary>
@@ -21,7 +19,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if an update is available.</returns>
         public bool IsUpdateAvailable()
         {
-            var response = _ApiHandler.CallAction<DefaultReturnObject>(_Device, "/update/isUpdateAvailable",
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/update/isUpdateAvailable",
                 null, JDownloaderHandler.LoginObject, true);
             return response?.Data != null && (bool)response.Data ;
         }
@@ -31,7 +29,7 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         public void RestartAndUpdate()
         {
-            _ApiHandler.CallAction<object>(_Device, "/update/restartAndUpdate",
+            ApiHandler.CallAction<object>(Device, "/update/restartAndUpdate",
                 null, JDownloaderHandler.LoginObject, true);
         }
 
@@ -40,7 +38,7 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         public void RunUpdateCheck()
         {
-            _ApiHandler.CallAction<object>(_Device, "/update/runUpdateCheck",
+            ApiHandler.CallAction<object>(Device, "/update/runUpdateCheck",
                 null, JDownloaderHandler.LoginObject, true);
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using My.JDownloader.Api.ApiHandler;
-using My.JDownloader.Api.ApiObjects;
-using My.JDownloader.Api.ApiObjects.Devices;
-using My.JDownloader.Api.ApiObjects.Login;
+using My.JDownloader.Api.Models;
+using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Login;
 using My.JDownloader.Api.Namespaces;
 using Newtonsoft.Json.Linq;
 using Extensions = My.JDownloader.Api.Namespaces.Extensions;
@@ -29,7 +29,7 @@ namespace My.JDownloader.Api
         public LinkCrawler LinkCrawler;
         public LinkGrabberV2 LinkgrabberV2;
         public Update Update;
-        public JD Jd;
+        public Jd Jd;
         public Namespaces.System System;
 
         internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject LoginObject)
@@ -45,7 +45,7 @@ namespace My.JDownloader.Api
             LinkCrawler = new LinkCrawler(_ApiHandler, _Device);
             LinkgrabberV2 = new LinkGrabberV2(_ApiHandler, _Device);
             Update = new Update(_ApiHandler, _Device);
-            Jd = new JD(_ApiHandler, _Device);
+            Jd = new Jd(_ApiHandler, _Device);
             System = new Namespaces.System(_ApiHandler, _Device);
             DirectConnect();
         }
