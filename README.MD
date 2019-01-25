@@ -57,6 +57,15 @@ So far the library contains the following namespaces and methods:
     - SetUsernameAndPassword(accountId, email, password) : boolean
 	- UpdateBasicAuth(BasicAuthObject) : boolean
 	
+- Captcha | 7/7 calls done
+	- Get(id) : string
+	- Get(id, format) : string
+	- GetCaptchaJob(id) : CaptchaJob
+	- List() : IEnumerable<CaptchaJob>
+	- Skip(id, type) : bool
+	- Solve(id, result, resultFormat) : bool
+	- Solve(id, result) : bool
+	
 - DownloadController | 6/6 calls done
 	- ForceDownload(linkIds[], packageIds[]) : boolean
     - Start() : boolean

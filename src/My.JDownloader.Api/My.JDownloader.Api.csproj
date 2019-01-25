@@ -9,8 +9,9 @@
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>2.2.0</Version>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <Version>2.3.0</Version>
+    <PackageReleaseNotes>- ADDED: the Captcha namespace
+- FIXED: the Account namespace was missing in the device handler</PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

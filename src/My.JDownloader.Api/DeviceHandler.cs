@@ -24,6 +24,7 @@ namespace My.JDownloader.Api
 
         public Accounts Accounts;
         public AccountsV2 AccountsV2;
+        public Captcha Captcha;
         public DownloadController DownloadController;
         public Extensions Extensions;
         public Extraction Extraction;
@@ -39,7 +40,9 @@ namespace My.JDownloader.Api
             _apiHandler = apiHandler;
             _loginObject = loginObject;
 
+            Accounts = new Accounts(_apiHandler, _device);
             AccountsV2 = new AccountsV2(_apiHandler, _device);
+            Captcha = new Captcha(_apiHandler, _device);
             DownloadController = new DownloadController(_apiHandler, _device);
             Extensions = new Extensions(_apiHandler, _device);
             Extraction = new Extraction(_apiHandler, _device);
