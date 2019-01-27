@@ -25,6 +25,9 @@ namespace My.JDownloader.Api
         public Accounts Accounts;
         public AccountsV2 AccountsV2;
         public Captcha Captcha;
+        public CaptchaForward CaptchaForward;
+        public Config Config;
+        public Dialogs Dialogs;
         public DownloadController DownloadController;
         public Extensions Extensions;
         public Extraction Extraction;
@@ -43,6 +46,9 @@ namespace My.JDownloader.Api
             Accounts = new Accounts(_apiHandler, _device);
             AccountsV2 = new AccountsV2(_apiHandler, _device);
             Captcha = new Captcha(_apiHandler, _device);
+            CaptchaForward = new CaptchaForward(_apiHandler, _device);
+            Config = new Config(_apiHandler, _device);
+            Dialogs = new Dialogs(_apiHandler, _device);
             DownloadController = new DownloadController(_apiHandler, _device);
             Extensions = new Extensions(_apiHandler, _device);
             Extraction = new Extraction(_apiHandler, _device);
@@ -86,7 +92,7 @@ namespace My.JDownloader.Api
             //Calling the query
             var response = _apiHandler.CallServer<LoginObject>(connectQueryUrl, _loginSecret);
 
-            //If the response is null the connection was not successfull
+            //If the response is null the connection was not successful
             if (response == null)
                 return false;
 

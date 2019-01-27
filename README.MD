@@ -66,6 +66,20 @@ So far the library contains the following namespaces and methods:
 	- Solve(id, result, resultFormat) : bool
 	- Solve(id, result) : bool
 	
+- CaptchaForward | 2/2 calls done
+	- CreateJobRecaptchaV2(one, two, three, four) : long
+	- GetResult(id) : string
+
+- Config | 8/8 calls done
+	- Get(interfaceName, storage, key) : object
+	- GetDefault(interfaceName, storage, key) : object
+	- List() : IEnumerable<AdvancedConfigApiEntry>
+	- List(pattern, returnDescription, returnValues, returnDefaultValues, returnEnumInfo) : IEnumerable<AdvancedConfigApiEntry>
+	- ListEnum(type) : IEnumerable<EnumOption>
+	- Query(query) : IEnumerable<AdvancedConfigApiEntry>
+	- Reset(interfaceName, storage, key) : boolean
+	- Set(interfaceName, storage, key) : boolean
+	
 - DownloadController | 6/6 calls done
 	- ForceDownload(linkIds[], packageIds[]) : boolean
     - Start() : boolean
