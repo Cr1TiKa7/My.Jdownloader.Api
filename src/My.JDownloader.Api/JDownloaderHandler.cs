@@ -147,14 +147,14 @@ namespace My.JDownloader.Api
         /// </summary>
         /// <param name="device">The device you want to call the methods on.</param>
         /// <returns>An deviceHandler instance.</returns>
-        public DeviceHandler GetDeviceHandler(DeviceObject device)
+        public DeviceHandler GetDeviceHandler(DeviceObject device, bool useJdownloaderApi = false)
         {
             if (IsConnected)
             {
                 //TODO: Make it possible to directly connect to the jdownloader client. If it's not working use the relay server.
                 //var tmp = _apiHandler.CallAction<DefaultReturnObject>(device, "/device/getDirectConnectionInfos",
                 //    null, LoginObject, true);
-                return new DeviceHandler(device, _apiHandler, LoginObject);
+                return new DeviceHandler(device, _apiHandler, LoginObject, useJdownloaderApi);
             }
             return null;
         }

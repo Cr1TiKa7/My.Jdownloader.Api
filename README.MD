@@ -17,11 +17,25 @@ _jdownloaderHandler.Connect("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSW
 JDownloaderHandler _jdownloaderHandler = new JDownloaderHandler("YOURMYJDOWNLOADERUSERNAME", "YOURMYJDOWNLOADERPASSWORD", "YOURAPPKEY");
 ```
 
-The JDownloaderHandler contains the following methods:
-- Connect(email, password) : boolean
-- Reconnect() : boolean
-- Disconnect() : boolean
-- GetDevices() : List<DeviceObject>
+> The JDownloaderHandler contains the following methods:
+> - Connect(email, password) : boolean
+> - Reconnect() : boolean
+> - Disconnect() : boolean
+> - GetDevices() : List<DeviceObject>
+
+After you successfully connected to the api you can get your active devices like this:
+
+``` c#
+var devices = jdownloaderHandler.GetDevices();
+```
+
+Now that you got your devices you can call the methods of the namespaces on the device:
+
+``` c#
+var device = devices[0];
+//device.<namespace>.<method>();
+device.Jd.DoSomethingCool();
+```
 
 #### Namespaces
 
@@ -79,7 +93,7 @@ So far the library contains the following namespaces and methods:
 	- Query(query) : IEnumerable<AdvancedConfigApiEntry>
 	- Reset(interfaceName, storage, key) : boolean
 	- Set(interfaceName, storage, key) : boolean
-	
+
 - DownloadController | 6/6 calls done
 	- ForceDownload(linkIds[], packageIds[]) : boolean
     - Start() : boolean
@@ -88,10 +102,12 @@ So far the library contains the following namespaces and methods:
     - GetCurrentState() : string
 	- GetSpeedInBps() : long
 
-- DownloadsV2 | 2/x calls done
+- DownloadsV2 | 4/26 calls done
 	- GetStopMark() : long
 	- GetStopMarkedLink() : StopMarkedLinkReturnObject
-	
+	- QueryLinks(linkQuery) : IEnumerable<DownloadLinkObject>
+	- QueryPackages(linkQuery) : IEnumerable<FilePackageObject>
+
 - Extensions | 5/5 calls done
 	- Install(extensionId) : boolean
 	- IsEnabled(className) : boolean
@@ -166,7 +182,9 @@ if (_JDownloaderHandler.IsConnected)
     if (devices.Count = 0)
     return;
     
-    var deviceHandler = _JDownloaderHandler.GetDeviceInstance(devices[0]);
+    var deviceHandler = _JDownloaderHandler.GetDeviceHandler(devices[0]);
+	//If you want to use the JDownloader API endpoint to connect to your device then you can call the GetDeviceHandler method like this:
+    var deviceHandler = _JDownloaderHandler.GetDeviceHandler(devices[0], true);
     deviceHandler.AccountV2.AddAccount("mega.co.nz", "test123", "test123");
 }
 ``` 

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using My.JDownloader.Api.Exceptions;
 using My.JDownloader.Api.Models.Action;
@@ -78,13 +79,20 @@ namespace My.JDownloader.Api.ApiHandler
                 Url = action
             };
 
+            //Regex _regex = new Regex("http\\:\\/\\/(192.168.*)\\:37733");
+            //var match = _regex.Match(_apiUrl);
+            //if (match.Success)
+            //{
+            //    _apiUrl = _apiUrl.Replace(match.Groups[0].Value, "89.163.144.231");
+            //}
             string url = _apiUrl + query;
+            //url = url.Replace("172.23.0.8", "89.163.144.231");
             string json = JsonConvert.SerializeObject(callActionObject);
             json = Encrypt(json, loginObject.DeviceEncryptionToken);
             string response = PostMethod(url,
                 json, loginObject.DeviceEncryptionToken);
 
-            if (response == null || !response.Contains(callActionObject.RequestId.ToString()))
+            if (response != null || !response.Contains(callActionObject.RequestId.ToString()))
             {
                 if (decryptResponse)
                 {
@@ -98,6 +106,14 @@ namespace My.JDownloader.Api.ApiHandler
 
         private string PostMethod(string url, string body = "", byte[] ivKey = null)
         {
+            //url = url.Replace("172.23.0.8", "89.163.144.231");
+            //Regex _regex = new Regex("http\\:\\/\\/(192.168.*)\\:37733");
+            //var match = _regex.Match(url);
+            //if (match.Success)
+            //{
+            //    url = url.Replace(match.Groups[0].Value, "89.163.144.231");
+            //}
+            //url = url.Replace("192.168.128.2", "89.163.144.231");
             try
             {
                 using (var httpClient = new HttpClient())

@@ -5,13 +5,13 @@
     <Authors>Cr1TiKa7</Authors>
     <Product />
     <Description>A simple My.JDownloader Api wrapper for c# written by Cr1TiKa7</Description>
-    <Copyright>Cr1TiKa7 ©2018</Copyright>
+    <Copyright>Cr1TiKa7 ©2018 - 2019</Copyright>
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>2.4.0</Version>
-    <PackageReleaseNotes>- ADDED: the config namespace.
-- ADDED: the dialog namespace.</PackageReleaseNotes>
+    <Version>2.4.1</Version>
+    <PackageReleaseNotes>- ADDED: QueryLinks and QueryPackages to the DownloadV2 namespace.
+- ADDED: the ability to use the jdownloader api endpoint instead of directly talking to the jdownloader client.</PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

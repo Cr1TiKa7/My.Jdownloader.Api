@@ -29,6 +29,7 @@ namespace My.JDownloader.Api
         public Config Config;
         public Dialogs Dialogs;
         public DownloadController DownloadController;
+        public DownloadsV2 DownloadsV2;
         public Extensions Extensions;
         public Extraction Extraction;
         public LinkCrawler LinkCrawler;
@@ -37,7 +38,7 @@ namespace My.JDownloader.Api
         public Jd Jd;
         public Namespaces.System System;
 
-        internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject loginObject)
+        internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject loginObject, bool useJdownloaderApi = false)
         {
             _device = device;
             _apiHandler = apiHandler;
@@ -50,6 +51,7 @@ namespace My.JDownloader.Api
             Config = new Config(_apiHandler, _device);
             Dialogs = new Dialogs(_apiHandler, _device);
             DownloadController = new DownloadController(_apiHandler, _device);
+            DownloadsV2 = new DownloadsV2(_apiHandler, _device);
             Extensions = new Extensions(_apiHandler, _device);
             Extraction = new Extraction(_apiHandler, _device);
             LinkCrawler = new LinkCrawler(_apiHandler, _device);
@@ -57,15 +59,20 @@ namespace My.JDownloader.Api
             Update = new Update(_apiHandler, _device);
             Jd = new Jd(_apiHandler, _device);
             System = new Namespaces.System(_apiHandler, _device);
-            DirectConnect();
+            DirectConnect(useJdownloaderApi);
         }
 
         /// <summary>
         /// Tries to directly connect to the JDownloader Client.
         /// </summary>
-        private void DirectConnect()
+        private void DirectConnect(bool useJdownloaderApi)
         {
             bool connected = false;
+            if (useJdownloaderApi)
+            {
+                Connect("http://api.jdownloader.org");
+                return;
+            }
             foreach (var conInfos in GetDirectConnectionInfos())
             {
                 if (Connect(string.Concat("http://", conInfos.Ip, ":", conInfos.Port)))
@@ -74,7 +81,7 @@ namespace My.JDownloader.Api
                     break;
                 }
             }
-            if (connected == false)
+            if (connected == false )
                 Connect("http://api.jdownloader.org");
         }
 
