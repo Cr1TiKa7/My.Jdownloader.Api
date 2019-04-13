@@ -125,6 +125,19 @@ namespace My.JDownloader.Api.Namespaces
         }
 
         /// <summary>
+        /// Gets all premium hoster names + urls that JDownloader supports.
+        /// </summary>
+        /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
+        public object PremiumHosterIcon(string premiumHoster)
+        {
+            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/premiumHosterIcon",
+                new[] {premiumHoster},
+                JDownloaderHandler.LoginObject, true);
+          
+            return response;
+        }
+
+        /// <summary>
         /// Queries all accounts.
         /// </summary>
         /// <param name="query">The query settings.</param>

@@ -6,8 +6,8 @@ namespace My.JDownloader.Api.Sample
     {
         static void Main(string[] args)
         {
-            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("thetrust3343@yahoo.de", "1Q2w3e4r5t!!", "test");
-            jdownloaderHandler.Connect("thetrust3343@yahoo.de", "1Q2w3e4r5t!!");
+            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("YOURMEAIL", "YOURPASSWORD", "test");
+            jdownloaderHandler.Connect("YOURMEAIL", "YOURPASSWORD");
             if (jdownloaderHandler.IsConnected)
             {
                 var devices = jdownloaderHandler.GetDevices();

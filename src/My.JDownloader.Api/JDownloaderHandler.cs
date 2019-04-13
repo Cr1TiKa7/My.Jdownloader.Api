@@ -25,7 +25,6 @@ namespace My.JDownloader.Api
         public JDownloaderHandler(string appkey)
         {
             Utils.AppKey = appkey;
-            InitializeClasses();
         }
 
         /// <summary>
@@ -37,17 +36,6 @@ namespace My.JDownloader.Api
         {
             Connect(email, password);
             Utils.AppKey = appKey;
-            InitializeClasses();
-        }
-
-        private void InitializeClasses()
-        {
-            //AccountsV2 = new AccountsV2(_apiHandler);
-            //DownloadController = new DownloadController(_apiHandler);
-            //Extensions = new Extensions(_apiHandler);
-            //Extraction = new Extraction(_apiHandler);
-            //LinkgrabberV2 = new LinkgrabberV2(_apiHandler);
-            //Update = new Update(_apiHandler);
         }
 
         #region "Connection methods"
@@ -57,7 +45,7 @@ namespace My.JDownloader.Api
         /// </summary>
         /// <param name="email">Email of the User</param>
         /// <param name="password">Password of the User</param>
-        /// <returns>Return if the Connection was succesfull</returns>
+        /// <returns>Return if the connection was succesful</returns>
         public bool Connect(string email, string password)
         {
             //Calculating the Login and Device secret
@@ -88,7 +76,7 @@ namespace My.JDownloader.Api
         /// <summary>
         /// Tries to reconnect your client to the api.
         /// </summary>
-        /// <returns>True if successfull else false</returns>
+        /// <returns>True if successful else false</returns>
         public bool Reconnect()
         {
             string query =
@@ -107,7 +95,7 @@ namespace My.JDownloader.Api
         /// <summary>
         /// Disconnects the your client from the api
         /// </summary>
-        /// <returns>True if successfull else false</returns>
+        /// <returns>True if successful else false</returns>
         public bool Disconnect()
         {
             string query = $"/my/disconnect?sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}";
@@ -124,8 +112,8 @@ namespace My.JDownloader.Api
         /// <summary>
         /// Lists all Devices which are currently connected to your my.jdownloader.org account.
         /// </summary>
-        /// <returns>Returns a list of your currently connected devices.</returns>
-        public List<DeviceObject> GetDevices()
+        /// <returns>Returns an enumerable of your currently connected devices.</returns>
+        public IEnumerable<DeviceObject> GetDevices()
         {
             List<DeviceObject> devices = new List<DeviceObject>();
             string query = $"/my/listdevices?sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}";
