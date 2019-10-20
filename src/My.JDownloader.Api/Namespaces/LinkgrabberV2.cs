@@ -301,17 +301,9 @@ namespace My.JDownloader.Api.Namespaces
     /// </summary>
     /// <param name="maxResults">Maximum number of return values.</param>
     /// <returns>An enumerable of all links that are currently in the linkcollector list.</returns>
-    public IEnumerable<QueryLinksResponseObject> QueryLinks(int maxResults = -1)
+    public IEnumerable<QueryLinksResponseObject> QueryLinks(QueryLinksRequestObject queryLinksRequestObject)
     {
-        QueryLinksObject queryLink = new QueryLinksObject
-        {
-            Availability = true,
-            Url = true
-        };
-        if (maxResults > 0)
-            queryLink.MaxResults = maxResults;
-
-        string json = JsonConvert.SerializeObject(queryLink);
+        string json = JsonConvert.SerializeObject(queryLinksRequestObject);
         var param = new[] {json};
 
         var response =
