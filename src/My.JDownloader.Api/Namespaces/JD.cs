@@ -7,7 +7,7 @@ namespace My.JDownloader.Api.Namespaces
     public class Jd:Base
     {
 
-        internal Jd(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Jd(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -28,12 +28,12 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns the core revision of the jdownloader client.</returns>
         public int GetCoreRevision()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/jd/getCoreRevision",
+            var response = ApiHandler.CallAction<DefaultResponse<int>>(Device, "/jd/getCoreRevision",
                 null, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return -1;
+            if (response != null)
+                return response.Data;
 
-            return (int) response.Data;
+            return -1;
         }
 
         /// <summary>
@@ -42,12 +42,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if successfull.</returns>
         public bool RefreshPlugins()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/jd/refreshPlugins",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/jd/refreshPlugins",
                 null, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return false;
 
-            return (bool) response.Data;
+            return response?.Data != null && response.Data;
         }
 
         /// <summary>
@@ -59,12 +57,13 @@ namespace My.JDownloader.Api.Namespaces
         public int Sum(int a, int b)
         {
             var param = new[] {a, b};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/jd/sum",
+            var response = ApiHandler.CallAction<DefaultResponse<int>>(Device, "/jd/sum",
                 param, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return -1;
 
-            return (int) response.Data;
+            if (response != null)
+                return response.Data;
+
+            return -1;
         }
 
         /// <summary>
@@ -73,12 +72,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>The current uptime of the JDownloader client as long.</returns>
         public long Uptime()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/jd/uptime",
+            var response = ApiHandler.CallAction<DefaultResponse<long>>(Device, "/jd/uptime",
                 null, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return -1;
 
-            return (long) response.Data;
+            if (response != null)
+                return response.Data;
+
+            return -1;
         }
 
         /// <summary>
@@ -87,12 +87,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>The current version of the JDownloader client.</returns>
         public long Version()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/jd/version",
+            var response = ApiHandler.CallAction<DefaultResponse<long>>(Device, "/jd/version",
                 null, JDownloaderHandler.LoginObject, true);
-            if (response == null)
-                return -1;
 
-            return (long) response.Data;
+            if (response != null) 
+                return response.Data;
+
+            return -1;
         }
     }
 }

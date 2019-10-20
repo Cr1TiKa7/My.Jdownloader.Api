@@ -60,7 +60,7 @@ namespace My.JDownloader.Api.ApiHandler
             return (T) JsonConvert.DeserializeObject(response, typeof(T));
         }
 
-        public T CallAction<T>(DeviceObject device, string action, object param, LoginObject loginObject,
+        public T CallAction<T>(Device device, string action, object param, LoginObject loginObject,
             bool decryptResponse = false)
         {
             if (device == null)
@@ -71,7 +71,7 @@ namespace My.JDownloader.Api.ApiHandler
 
             string query =
                 $"/t_{HttpUtility.UrlEncode(loginObject.SessionToken)}_{HttpUtility.UrlEncode(device.Id)}{action}";
-            CallActionObject callActionObject = new CallActionObject
+            CallAction callAction = new CallAction
             {
                 ApiVer = 1,
                 Params = param,
@@ -87,19 +87,19 @@ namespace My.JDownloader.Api.ApiHandler
             //}
             string url = _apiUrl + query;
             //url = url.Replace("172.23.0.8", "89.163.144.231");
-            string json = JsonConvert.SerializeObject(callActionObject);
+            string json = JsonConvert.SerializeObject(callAction);
             json = Encrypt(json, loginObject.DeviceEncryptionToken);
             string response = PostMethod(url,
                 json, loginObject.DeviceEncryptionToken);
 
-            if (response != null || !response.Contains(callActionObject.RequestId.ToString()))
+            if (response != null || !response.Contains(callAction.RequestId.ToString()))
             {
                 if (decryptResponse)
                 {
                     string tmp = Decrypt(response, loginObject.DeviceEncryptionToken);
                     return (T) JsonConvert.DeserializeObject(tmp, typeof(T));
                 }
-                throw new InvalidRequestIdException("The 'RequestId' differs from the 'Requestid' from the query.");
+                throw new InvalidRequestIdException("The 'RequestId' differs from the 'Requestid' from the queryRequest.");
             }
             return (T) JsonConvert.DeserializeObject(response, typeof(T));
         }

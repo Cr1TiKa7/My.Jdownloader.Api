@@ -11,7 +11,7 @@ namespace My.JDownloader.Api.Namespaces
 {
     public class Accounts : Base
     {
-        internal Accounts(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Accounts(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -27,12 +27,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool AddAccount(string hoster, string email, string password)
         {
             var param = new[] {hoster, email, password};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/addAccount",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/addAccount",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool) response.Data;
+            return response.Data;
         }
 
         /// <summary>
@@ -43,12 +43,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool DisableAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/disableAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/disableAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool) response.Data;
+            return response.Data;
         }
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool EnableAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/enableAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/enableAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool) response.Data;
+            return response.Data;
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace My.JDownloader.Api.Namespaces
         public Account GetAccountInfo(long accountId)
         {
             var param = new[] {accountId};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/getAccountInfo",
+            var response = ApiHandler.CallAction<DefaultResponse<Account>>(Device, "/accounts/getAccountInfo",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return (Account) response?.Data;
+            return response?.Data;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace My.JDownloader.Api.Namespaces
         public string GetPremiumHosterUrl(string hoster)
         {
             var param = new[] {hoster};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/getPremiumHosterUrl",
+            var response = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/accounts/getPremiumHosterUrl",
                 param, JDownloaderHandler.LoginObject, true);
             if (response?.Data != null)
                 return response.Data.ToString();
@@ -102,7 +102,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable of all available premium hoster names.</returns>
         public IEnumerable<string> ListPremiumHoster()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/listPremiumHoster", null,
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/listPremiumHoster", null,
                 JDownloaderHandler.LoginObject, true);
             var tmp = ((JArray) response.Data);
             return tmp?.ToObject<IEnumerable<string>>();
@@ -114,7 +114,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
         public Dictionary<string, string> ListPremiumHosterUrls()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/listPremiumHosterUrls",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/listPremiumHosterUrls",
                 null,
                 JDownloaderHandler.LoginObject, true);
             var tmp = ((JObject) response.Data);
@@ -130,7 +130,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
         public object PremiumHosterIcon(string premiumHoster)
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/premiumHosterIcon",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/premiumHosterIcon",
                 new[] {premiumHoster},
                 JDownloaderHandler.LoginObject, true);
           
@@ -140,11 +140,11 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Queries all accounts.
         /// </summary>
-        /// <param name="query">The query settings.</param>
+        /// <param name="query">The queryRequest settings.</param>
         /// <returns>An enumerable which contains all accounts.</returns>
         public IEnumerable<Account> QueryAccounts(ApiQuery query)
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/queryAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/queryAccounts",
                 null,
                 JDownloaderHandler.LoginObject, true);
 
@@ -161,12 +161,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool RemoveAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/removeAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/removeAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool)response.Data;
+            return response.Data;
         }
 
         /// <summary>
@@ -178,12 +178,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool SetEnabledState(bool enabled, long[] accountIds)
         {
             var param = new[] { accountIds };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/setEnabledState",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/setEnabledState",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool)response.Data;
+            return response.Data;
         }
         
         /// <summary>
@@ -196,12 +196,12 @@ namespace My.JDownloader.Api.Namespaces
         public bool UpdateAccount(long accountId, string username, string password)
         {
             var param = new object[] { accountId,username,password };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accounts/updateAccount",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/accounts/updateAccount",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data == null) return false;
 
-            return (bool)response.Data;
+            return response.Data;
         }
     }
 }

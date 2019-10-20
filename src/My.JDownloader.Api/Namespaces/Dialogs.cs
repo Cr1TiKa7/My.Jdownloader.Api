@@ -3,13 +3,14 @@ using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Devices;
 using My.JDownloader.Api.Models.Dialog;
+using My.JDownloader.Api.Models.Dialog.Response;
 using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
 {
     public class Dialogs : Base
     {
-        internal Dialogs(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Dialogs(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -23,7 +24,7 @@ namespace My.JDownloader.Api.Namespaces
         public void Answer(long id, Dictionary<object,object> data)
         {
             var param = new object[] { id, data };
-            ApiHandler.CallAction<DefaultReturnObject>(Device, "/dialogs/answer",
+            ApiHandler.CallAction<DefaultResponse<object>>(Device, "/dialogs/answer",
                 param, JDownloaderHandler.LoginObject, true);
         }
 
@@ -34,14 +35,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <param name="icon">True if you want the icon of the dialog.</param>
         /// <param name="properties">True if you want the properties of the dialog.</param>
         /// <returns>An object which contains the informations of the dialog.</returns>
-        public DialogInfo Get(long id, bool icon, bool properties)
+        public DialogInfoResponse Get(long id, bool icon, bool properties)
         {
             var param = new object[] { id, icon, properties };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/dialogs/get",
+            var response = ApiHandler.CallAction<DefaultResponse<DialogInfoResponse>>(Device, "/dialogs/get",
                 param, JDownloaderHandler.LoginObject, true);
 
-            var data = (JObject)response?.Data;
-            return data?.ToObject<DialogInfo>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -49,14 +49,13 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="dialogType">Name of the dialog type.</param>
         /// <returns>An object which contains the informations about the dialog type.</returns>
-        public DialogTypeInfo GetTypeInfo(string dialogType)
+        public DialogTypeInfoResponse GetTypeInfo(string dialogType)
         {
             var param = new [] { dialogType };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/dialogs/getTypeInfo",
+            var response = ApiHandler.CallAction<DefaultResponse<DialogTypeInfoResponse>>(Device, "/dialogs/getTypeInfo",
                 param, JDownloaderHandler.LoginObject, true);
 
-            var data = (JObject)response?.Data;
-            return data?.ToObject<DialogTypeInfo>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An array which contains the ids of the dialogs.</returns>
         public long[] List()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device,
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device,
                 "/dialogs/list", null, JDownloaderHandler.LoginObject);
 
             var tmp = (JArray)response?.Data;

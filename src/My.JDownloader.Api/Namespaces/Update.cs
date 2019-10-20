@@ -7,7 +7,7 @@ namespace My.JDownloader.Api.Namespaces
     public class Update : Base
     {
 
-        internal Update(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Update(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -19,9 +19,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if an update is available.</returns>
         public bool IsUpdateAvailable()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/update/isUpdateAvailable",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/update/isUpdateAvailable",
                 null, JDownloaderHandler.LoginObject, true);
-            return response?.Data != null && (bool)response.Data ;
+
+            return response?.Data != null && response.Data ;
         }
 
         /// <summary>

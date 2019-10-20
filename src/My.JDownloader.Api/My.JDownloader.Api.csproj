@@ -9,9 +9,8 @@
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>2.4.1</Version>
-    <PackageReleaseNotes>- ADDED: QueryLinks and QueryPackages to the DownloadV2 namespace.
-- ADDED: the ability to use the jdownloader api endpoint instead of directly talking to the jdownloader client.</PackageReleaseNotes>
+    <Version>2.4.2</Version>
+    <PackageReleaseNotes>- Fixed Issue #3 (QueryLinks of the LinkgrabberV2 endpoints  returns nothing if no parameter was set.)</PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

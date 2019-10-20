@@ -3,6 +3,7 @@ using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Devices;
 using My.JDownloader.Api.Models.Extraction;
+using My.JDownloader.Api.Models.Extraction.Response;
 using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
@@ -10,7 +11,7 @@ namespace My.JDownloader.Api.Namespaces
     public class Extraction : Base
     {
 
-        internal Extraction(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Extraction(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -20,11 +21,11 @@ namespace My.JDownloader.Api.Namespaces
         /// Adds an archive password to the client.
         /// </summary>
         /// <param name="password">The password to add.</param>
-        /// <returns>True if successfull.</returns>
+        /// <returns>True if successful.</returns>
         public bool AddArchivePassword(string password)
         {
             var param = new[] {password};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/addArchivePassword",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/addArchivePassword",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response?.Data != null;
@@ -33,15 +34,15 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Cancels an extraction process.
         /// </summary>
-        /// <param name="controllerId">The id of the controll you want to cancel.</param>
-        /// <returns>True if successfull.</returns>
+        /// <param name="controllerId">The id of the control you want to cancel.</param>
+        /// <returns>True if successful.</returns>
         public bool CancelExtraction(string controllerId)
         {
             var param = new[] { controllerId };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/cancelExtraction",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/extraction/cancelExtraction",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return response?.Data != null && (bool)response.Data;
+            return response?.Data != null && response.Data;
         }
 
         /// <summary>
@@ -50,14 +51,14 @@ namespace My.JDownloader.Api.Namespaces
         /// <param name="linkIds">Ids of the links you want to check.</param>
         /// <param name="packageIds">Ids of the packages you want to check.</param>
         /// <returns>An enumerable which contains all the archive statuses.</returns>
-        public IEnumerable<ArchiveStatus> GetArchiveInfo(long[] linkIds, long[] packageIds)
+        public IEnumerable<ArchiveStatusResponse> GetArchiveInfo(long[] linkIds, long[] packageIds)
         {
             var param = new[] { linkIds,packageIds };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/getArchiveInfo",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getArchiveInfo",
                 param, JDownloaderHandler.LoginObject, true);
-            JArray tmp = (JArray)response.Data;
 
-            return tmp.ToObject<IEnumerable<ArchiveStatus>>();
+            JArray tmp = (JArray)response.Data;
+            return tmp.ToObject<IEnumerable<ArchiveStatusResponse>>();
         }
 
         /// <summary>
@@ -65,27 +66,27 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="archiveIds">The archive ids you want the settings from.</param>
         /// <returns>An enumerable which contains the settings of the given archive ids.</returns>
-        public IEnumerable<ArchiveSettings> GetArchiveSettings(string[] archiveIds)
+        public IEnumerable<ArchiveSettingsResponse> GetArchiveSettings(string[] archiveIds)
         {
             var param = new[] { archiveIds };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/getArchiveSettings",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getArchiveSettings",
                 param, JDownloaderHandler.LoginObject, true);
-            JArray tmp = (JArray)response.Data;
 
-            return tmp.ToObject<IEnumerable<ArchiveSettings>>();
+            JArray tmp = (JArray)response.Data;
+            return tmp.ToObject<IEnumerable<ArchiveSettingsResponse>>();
         }
         
         /// <summary>
         /// Gets all archives statuses that are currently queued.
         /// </summary>
         /// <returns>An enumerable which contains all archive statuses of the queued archives.</returns>
-        public IEnumerable<ArchiveStatus> GetQueue()
+        public IEnumerable<ArchiveStatusResponse> GetQueue()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/getQueue",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getQueue",
                 null, JDownloaderHandler.LoginObject, true);
-            JArray tmp = (JArray)response.Data;
 
-            return tmp.ToObject<IEnumerable<ArchiveStatus>>();
+            JArray tmp = (JArray)response.Data;
+            return tmp.ToObject<IEnumerable<ArchiveStatusResponse>>();
         }
 
         /// <summary>
@@ -94,13 +95,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <param name="archiveId">The id of the archive you want to update the settings.</param>
         /// <param name="archiveSettings">The new settings for the archive.</param>
         /// <returns>True if successful.</returns>
-        public bool SetArchiveSettings(string archiveId, ArchiveSettings archiveSettings)
+        public bool SetArchiveSettings(string archiveId, ArchiveSettingsResponse archiveSettings)
         {
             var param = new object[] { archiveId, archiveSettings };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/setArchiveSettings",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/extraction/setArchiveSettings",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return response?.Data != null && (bool)response.Data;
+            return response?.Data != null && response.Data;
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>A dictionary which contains the archive id as the key and the extraction status as value.</returns>
         public Dictionary<string,bool?> StartExtractionNow(long[] linkIds, long[] packageIds)
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/extraction/startExtractionNow",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/startExtractionNow",
                 null, JDownloaderHandler.LoginObject, true);
 
             var tmp = ((JObject)response.Data);

@@ -6,7 +6,7 @@ namespace My.JDownloader.Api.Namespaces
 {
     public class CaptchaForward : Base
     {
-        internal CaptchaForward(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal CaptchaForward(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -24,11 +24,11 @@ namespace My.JDownloader.Api.Namespaces
         public long CreateJobRecaptchaV2(string one, string two, string three, string four)
         {
             var param = new [] {one,two,three,four };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captchaforward/createJobRecaptchaV2",
+            var response = ApiHandler.CallAction<DefaultResponse<long>>(Device, "/captchaforward/createJobRecaptchaV2",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data != null)
-                return (long)response.Data;
+                return response.Data;
 
             return -1;
         }
@@ -41,11 +41,11 @@ namespace My.JDownloader.Api.Namespaces
         public string GetResult(long id)
         {
             var param = new[] { id };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captchaforward/getResult",
+            var response = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/captchaforward/getResult",
                 param, JDownloaderHandler.LoginObject, true);
 
             if (response?.Data != null)
-                return response.Data.ToString();
+                return response.Data;
 
             return string.Empty;
         }

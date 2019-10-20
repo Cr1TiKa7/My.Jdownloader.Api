@@ -2,6 +2,8 @@
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Captcha;
+using My.JDownloader.Api.Models.Captcha.Request;
+using My.JDownloader.Api.Models.Captcha.Response;
 using My.JDownloader.Api.Models.Devices;
 using Newtonsoft.Json.Linq;
 
@@ -9,7 +11,7 @@ namespace My.JDownloader.Api.Namespaces
 {
     public class Captcha : Base
     {
-        internal Captcha(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal Captcha(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -23,10 +25,10 @@ namespace My.JDownloader.Api.Namespaces
         public string Get(long id)
         {
             var param = new[] {id};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/get",
+            var response = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/captcha/get",
                 param, JDownloaderHandler.LoginObject, true);
             if (response?.Data != null)
-                return response.Data.ToString();
+                return response.Data;
             return "";
         }
 
@@ -39,10 +41,10 @@ namespace My.JDownloader.Api.Namespaces
         public string Get(long id, string format)
         {
             var param = new object[] {id, format};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/get",
+            var response = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/captcha/get",
                 param, JDownloaderHandler.LoginObject, true);
             if (response?.Data != null)
-                return response.Data.ToString();
+                return response.Data;
             return "";
         }
 
@@ -51,26 +53,26 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="id">The id of the captcha job.</param>
         /// <returns>An object which contains the informations about the captcha job.</returns>
-        public CaptchaJob GetCaptchaJob(long id)
+        public CaptchaJobResponse GetCaptchaJob(long id)
         {
             var param = new[] {id};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/getCaptchaJob",
+            var response = ApiHandler.CallAction<DefaultResponse<CaptchaJobResponse>>(Device, "/captcha/getCaptchaJob",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return (CaptchaJob) response?.Data;
+            return response?.Data;
         }
 
         /// <summary>
         /// Gets all available captcha jobs.
         /// </summary>
         /// <returns>An enumerable which contains informations about all available captcha jobs.</returns>
-        public IEnumerable<CaptchaJob> List()
+        public IEnumerable<CaptchaJobResponse> List()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/list",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/captcha/list",
                 null, JDownloaderHandler.LoginObject, true);
             var tmp = ((JArray) response.Data);
 
-            return tmp?.ToObject<IEnumerable<CaptchaJob>>();
+            return tmp?.ToObject<IEnumerable<CaptchaJobResponse>>();
         }
 
         /// <summary>
@@ -82,10 +84,10 @@ namespace My.JDownloader.Api.Namespaces
         public bool Skip(long id, SkipRequest type)
         {
             var param = new[] {id};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/skip",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/captcha/skip",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return response?.Data != null && (bool) response.Data;
+            return response?.Data != null && response.Data;
         }
 
         /// <summary>
@@ -98,10 +100,10 @@ namespace My.JDownloader.Api.Namespaces
         public bool Solve(long id, string result, string resultFormat)
         {
             var param = new object[] { id, result, resultFormat };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/solve",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/captcha/solve",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return response?.Data != null && (bool)response.Data;
+            return response?.Data != null && response.Data;
         }
 
         /// <summary>
@@ -113,10 +115,10 @@ namespace My.JDownloader.Api.Namespaces
         public bool Solve(long id, string result)
         {
             var param = new object[] { id, result };
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/captcha/solve",
+            var response = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/captcha/solve",
                 param, JDownloaderHandler.LoginObject, true);
 
-            return response?.Data != null && (bool)response.Data;
+            return response?.Data != null && response.Data;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace My.JDownloader.Api.Namespaces
     public class DownloadController : Base
     {
 
-        internal DownloadController(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal DownloadController(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -22,7 +22,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool ForceDownload(long[] linkIds, long[] packageIds)
         {
             var param = new[] {linkIds, packageIds};
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/forceDownload", param, JDownloaderHandler.LoginObject, true);
+            var result = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/downloadcontroller/forceDownload", param, JDownloaderHandler.LoginObject, true);
             return result != null;
         }
 
@@ -32,9 +32,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>The current state of the device.</returns>
         public string GetCurrentState()
         {
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/getCurrentState", null, JDownloaderHandler.LoginObject, true);
+            var result = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/downloadcontroller/getCurrentState", null, JDownloaderHandler.LoginObject, true);
+            
             if (result != null)
-                return (string)result.Data;
+                return result.Data;
             return "UNKOWN_STATE";
         }
 
@@ -44,9 +45,9 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>The actual download speed.</returns>
         public long GetSpeedInBps()
         {
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/getSpeedInBps", null, JDownloaderHandler.LoginObject, true);
+            var result = ApiHandler.CallAction<DefaultResponse<long>>(Device, "/downloadcontroller/getSpeedInBps", null, JDownloaderHandler.LoginObject, true);
             if (result != null)
-                return (long)result.Data;
+                return result.Data;
             return 0;
         }
 
@@ -56,10 +57,9 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if successfull.</returns>
         public bool Start()
         {
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/stop", null, JDownloaderHandler.LoginObject, true);
-            if (result != null)
-                return (bool) result.Data;
-            return false;
+            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/stop", null, JDownloaderHandler.LoginObject, true);
+          
+            return result?.Data != null && result.Data;
         }
 
         /// <summary>
@@ -68,10 +68,9 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if successfull.</returns>
         public bool Stop()
         {
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/start", null, JDownloaderHandler.LoginObject, true);
-            if (result != null)
-                return (bool)result.Data;
-            return false;
+            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/start", null, JDownloaderHandler.LoginObject, true);
+
+            return result?.Data != null && result.Data;
         }
 
         /// <summary>
@@ -82,10 +81,9 @@ namespace My.JDownloader.Api.Namespaces
         public bool Pause(bool pause)
         {
             var param = new[] {pause};
-            var result = ApiHandler.CallAction<DefaultReturnObject>(Device, "/downloadcontroller/pause", param, JDownloaderHandler.LoginObject, true);
-            if (result != null)
-                return (bool)result.Data;
-            return false;
+            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/pause", param, JDownloaderHandler.LoginObject, true);
+            
+            return result?.Data != null && result.Data;
         }
     }
 }

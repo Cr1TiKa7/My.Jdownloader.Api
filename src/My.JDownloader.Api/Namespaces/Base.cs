@@ -8,6 +8,6 @@ namespace My.JDownloader.Api.Namespaces
         internal Base() {}
 
         public JDownloaderApiHandler ApiHandler;
-        public DeviceObject Device;
+        public Device Device;
     }
 }

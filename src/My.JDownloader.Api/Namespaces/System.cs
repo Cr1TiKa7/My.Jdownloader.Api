@@ -2,6 +2,7 @@
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Devices;
 using My.JDownloader.Api.Models.System;
+using My.JDownloader.Api.Models.System.Response;
 using Newtonsoft.Json.Linq;
 
 namespace My.JDownloader.Api.Namespaces
@@ -9,7 +10,7 @@ namespace My.JDownloader.Api.Namespaces
     public class System : Base
     {
 
-        internal System(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal System(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -28,25 +29,24 @@ namespace My.JDownloader.Api.Namespaces
         /// </summary>
         /// <param name="path">The Path you want to check.</param>
         /// <returns>An array with storage informations.</returns>
-        public StorageInfoReturnObject[] GetStorageInfos(string path)
+        public StorageInfoResponse[] GetStorageInfos(string path)
         {
             var param = new[] {path};
-            var tmp =ApiHandler.CallAction<DefaultReturnObject>(Device, "/system/getStorageInfos", param, JDownloaderHandler.LoginObject, true);
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/system/getStorageInfos", param, JDownloaderHandler.LoginObject, true);
 
-            var data = (JArray) tmp?.Data;
-            return data?.ToObject<StorageInfoReturnObject[]>();
+            var data = (JArray) response?.Data;
+            return data?.ToObject<StorageInfoResponse[]>();
         }
 
         /// <summary>
         /// Gets information of the system the JDownloader client is running on.
         /// </summary>
         /// <returns></returns>
-        public SystemInfoReturnObject GetSystemInfos()
+        public SystemInfoResponse GetSystemInfos()
         {
-            var tmp = ApiHandler.CallAction<DefaultReturnObject>(Device, "/system/getSystemInfos", null, JDownloaderHandler.LoginObject, true);
+            var response = ApiHandler.CallAction<DefaultResponse<SystemInfoResponse>>(Device, "/system/getSystemInfos", null, JDownloaderHandler.LoginObject, true);
 
-            var data = (JObject) tmp?.Data;
-            return data?.ToObject<SystemInfoReturnObject>();
+            return response?.Data;
         }
 
         /// <summary>

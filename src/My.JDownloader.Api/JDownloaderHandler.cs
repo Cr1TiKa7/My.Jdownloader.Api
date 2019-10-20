@@ -2,6 +2,7 @@
 using System.Web;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Devices.Response;
 using My.JDownloader.Api.Models.Login;
 
 namespace My.JDownloader.Api
@@ -52,11 +53,11 @@ namespace My.JDownloader.Api
             _loginSecret = Utils.GetSecret(email, password, Utils.ServerDomain);
             _deviceSecret = Utils.GetSecret(email, password, Utils.DeviceDomain);
 
-            //Creating the query for the connection request
+            //Creating the queryRequest for the connection request
             string connectQueryUrl =
                 $"/my/connect?email={HttpUtility.UrlEncode(email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
 
-            //Calling the query
+            //Calling the queryRequest
             var response = _apiHandler.CallServer<LoginObject>(connectQueryUrl, _loginSecret);
 
             //If the response is null the connection was not successfull
@@ -113,15 +114,15 @@ namespace My.JDownloader.Api
         /// Lists all Devices which are currently connected to your my.jdownloader.org account.
         /// </summary>
         /// <returns>Returns an enumerable of your currently connected devices.</returns>
-        public IEnumerable<DeviceObject> GetDevices()
+        public IEnumerable<Device> GetDevices()
         {
-            List<DeviceObject> devices = new List<DeviceObject>();
+            List<Device> devices = new List<Device>();
             string query = $"/my/listdevices?sessiontoken={HttpUtility.UrlEncode(LoginObject.SessionToken)}";
-            var response = _apiHandler.CallServer<DeviceJsonReturnObject>(query, LoginObject.ServerEncryptionToken);
+            var response = _apiHandler.CallServer<DeviceJsonResponse>(query, LoginObject.ServerEncryptionToken);
             if (response == null)
                 return devices;
 
-            foreach (DeviceObject device in response.Devices)
+            foreach (Device device in response.Devices)
             {
                 devices.Add(device);
             }
@@ -135,7 +136,7 @@ namespace My.JDownloader.Api
         /// </summary>
         /// <param name="device">The device you want to call the methods on.</param>
         /// <returns>An deviceHandler instance.</returns>
-        public DeviceHandler GetDeviceHandler(DeviceObject device, bool useJdownloaderApi = false)
+        public DeviceHandler GetDeviceHandler(Device device, bool useJdownloaderApi = false)
         {
             if (IsConnected)
             {

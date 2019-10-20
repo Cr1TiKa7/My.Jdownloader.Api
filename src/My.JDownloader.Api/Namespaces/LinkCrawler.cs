@@ -7,7 +7,7 @@ namespace My.JDownloader.Api.Namespaces
     public class LinkCrawler : Base
     {
 
-        internal LinkCrawler(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal LinkCrawler(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -20,10 +20,11 @@ namespace My.JDownloader.Api.Namespaces
         public bool IsCrawling()
         {
             var response =
-                ApiHandler.CallAction<DefaultReturnObject>(Device, "/linkcrawler/isCrawling", null, JDownloaderHandler.LoginObject);
+                ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/linkcrawler/isCrawling", null, JDownloaderHandler.LoginObject);
             if (response?.Data == null)
                 return false;
-            return (bool) response.Data;
+
+            return response.Data;
         }
     }
 }

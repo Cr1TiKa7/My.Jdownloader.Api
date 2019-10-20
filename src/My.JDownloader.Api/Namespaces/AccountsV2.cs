@@ -2,6 +2,8 @@
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.AccountV2;
+using My.JDownloader.Api.Models.AccountV2.Request;
+using My.JDownloader.Api.Models.AccountV2.Response;
 using My.JDownloader.Api.Models.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,7 +13,7 @@ namespace My.JDownloader.Api.Namespaces
     public class AccountsV2 : Base
     {
 
-        internal AccountsV2(JDownloaderApiHandler apiHandler, DeviceObject device)
+        internal AccountsV2(JDownloaderApiHandler apiHandler, Device device)
         {
             ApiHandler = apiHandler;
             Device = device;
@@ -27,7 +29,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool AddAccount(string hoster, string email, string password)
         {
             var param = new[] {hoster, email, password};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/addAccount",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/addAccount",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -36,13 +38,13 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Adds an basic authorization to the client.
         /// </summary>
-        /// <param name="requestObject">Contains the needed properties for the request e.g. the username and password.</param>
+        /// <param name="request">Contains the needed properties for the request e.g. the username and password.</param>
         /// <returns>True if successfull.</returns>
-        public bool AddBasicAuth(BasicAuthObject requestObject)
+        public bool AddBasicAuth(BasicAuthRequest request)
         {
             var param = new[]
-                {requestObject.Type.ToString(), requestObject.Hostmask, requestObject.Username, requestObject.Password};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/addBasicAuth",
+                {request.Type.ToString(), request.Hostmask, request.Username, request.Password};
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/addBasicAuth",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -56,7 +58,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool DisableAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/disableAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/disableAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -70,7 +72,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool EnableAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/enableAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/enableAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -84,40 +86,40 @@ namespace My.JDownloader.Api.Namespaces
         public string GetPremiumHosterUrl(string hoster)
         {
             var param = new[] {hoster};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/getPremiumHosterUrl",
+            var response = ApiHandler.CallAction<DefaultResponse<string>>(Device, "/accountsV2/getPremiumHosterUrl",
                 param, JDownloaderHandler.LoginObject, true);
             if (response?.Data != null)
-                return response.Data.ToString();
+                return response.Data;
             return "";
         }
 
         /// <summary>
         /// Lists all accounts which are stored on the device.
         /// </summary>
-        /// <param name="requestObject">Contains properties like Username (boolean) etc. If set to true the api will return the Username.</param>
+        /// <param name="request">Contains properties like Username (boolean) etc. If set to true the api will return the Username.</param>
         /// <returns>A list of all accounts stored on the device.</returns>
-        public IEnumerable<ListAccountResponseObject> ListAccounts(ListAccountRequestObject requestObject)
+        public IEnumerable<ListAccountResponse> ListAccounts(ListAccountRequest request)
         {
-            string json = JsonConvert.SerializeObject(requestObject);
+            string json = JsonConvert.SerializeObject(request);
             var param = new[] {json};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/listAccounts", param,
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listAccounts", param,
                 JDownloaderHandler.LoginObject, true);
             JArray tmp = (JArray) response.Data;
 
-            return tmp.ToObject<IEnumerable<ListAccountResponseObject>>();
+            return tmp.ToObject<IEnumerable<ListAccountResponse>>();
         }
 
         /// <summary>
         /// Gets all basic authorization informations of the client.
         /// </summary>
         /// <returns>An enumerable with all basic authorization informations.</returns>
-        public IEnumerable<ListBasicAuthResponseObject> ListBasicAuth()
+        public IEnumerable<ListBasicAuthResponse> ListBasicAuth()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/listBasicAuth", null,
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listBasicAuth", null,
                 JDownloaderHandler.LoginObject, true);
             JArray tmp = (JArray) response.Data;
 
-            return tmp.ToObject<IEnumerable<ListBasicAuthResponseObject>> ();
+            return tmp.ToObject<IEnumerable<ListBasicAuthResponse>> ();
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable of all available premium hoster names.</returns>
         public IEnumerable<string> ListPremiumHoster()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/listPremiumHoster", null,
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listPremiumHoster", null,
                 JDownloaderHandler.LoginObject, true);
             var tmp = ((JArray) response.Data);
             return tmp?.ToObject<IEnumerable<string>>();
@@ -138,7 +140,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
         public Dictionary<string, string> ListPremiumHosterUrls()
         {
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/listPremiumHosterUrls",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listPremiumHosterUrls",
                 null,
                 JDownloaderHandler.LoginObject, true);
             var tmp = ((JObject) response.Data);
@@ -156,7 +158,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool RefreshAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/refreshAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/refreshAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -170,7 +172,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool RemoveAccounts(long[] accountIds)
         {
             var param = new[] {accountIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device,"/accountsV2/removeAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device,"/accountsV2/removeAccounts",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -184,7 +186,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool RemoveBasicAuths(long[] basicAuthIds)
         {
             var param = new[] {basicAuthIds};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/removeBasicAuths",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/removeBasicAuths",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -200,7 +202,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool SetUsernameAndPassword(long accountId, string email, string password)
         {
             var param = new[] {accountId.ToString(), email, password};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/setUserNameAndPassword",
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/setUserNameAndPassword",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;
@@ -209,12 +211,12 @@ namespace My.JDownloader.Api.Namespaces
         /// <summary>
         /// Updates an basic auth entry.
         /// </summary>
-        /// <param name="requestObject">The updated basic auth informations.</param>
+        /// <param name="request">The updated basic auth informations.</param>
         /// <returns>True if successfull.</returns>
-        public bool UpdateBasicAuth(BasicAuthObject requestObject)
+        public bool UpdateBasicAuth(BasicAuthRequest request)
         {
-            var param = new[] {  JsonConvert.SerializeObject(requestObject)};
-            var response = ApiHandler.CallAction<DefaultReturnObject>(Device, "/accountsV2/updateBasicAuth",
+            var param = new[] {  JsonConvert.SerializeObject(request)};
+            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/updateBasicAuth",
                 param, JDownloaderHandler.LoginObject, true);
 
             return response != null;

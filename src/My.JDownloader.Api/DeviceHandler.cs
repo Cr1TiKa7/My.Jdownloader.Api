@@ -3,6 +3,7 @@ using System.Web;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Devices.Response;
 using My.JDownloader.Api.Models.Login;
 using My.JDownloader.Api.Namespaces;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,7 @@ namespace My.JDownloader.Api
 {
     public class DeviceHandler
     {
-        private readonly DeviceObject _device;
+        private readonly Device _device;
         private readonly JDownloaderApiHandler _apiHandler;
         
         private LoginObject _loginObject;
@@ -38,7 +39,7 @@ namespace My.JDownloader.Api
         public Jd Jd;
         public Namespaces.System System;
 
-        internal DeviceHandler(DeviceObject device, JDownloaderApiHandler apiHandler, LoginObject loginObject, bool useJdownloaderApi = false)
+        internal DeviceHandler(Device device, JDownloaderApiHandler apiHandler, LoginObject loginObject, bool useJdownloaderApi = false)
         {
             _device = device;
             _apiHandler = apiHandler;
@@ -92,11 +93,11 @@ namespace My.JDownloader.Api
             _loginSecret = Utils.GetSecret(_loginObject.Email, _loginObject.Password, Utils.ServerDomain);
             _deviceSecret = Utils.GetSecret(_loginObject.Email, _loginObject.Password, Utils.DeviceDomain);
 
-            //Creating the query for the connection request
+            //Creating the queryRequest for the connection request
             string connectQueryUrl =
                 $"/my/connect?email={HttpUtility.UrlEncode(_loginObject.Email)}&appkey={HttpUtility.UrlEncode(Utils.AppKey)}";
             _apiHandler.SetApiUrl(apiUrl);
-            //Calling the query
+            //Calling the queryRequest
             var response = _apiHandler.CallServer<LoginObject>(connectQueryUrl, _loginSecret);
 
             //If the response is null the connection was not successful
@@ -114,15 +115,15 @@ namespace My.JDownloader.Api
             return true;
         }
 
-        private List<DeviceConnectionInfoObject> GetDirectConnectionInfos()
+        private List<DeviceConnectionInfo> GetDirectConnectionInfos()
         {
-            var tmp = _apiHandler.CallAction<DefaultReturnObject>(_device, "/device/getDirectConnectionInfos",
+            var tmp = _apiHandler.CallAction<DefaultResponse<object>>(_device, "/device/getDirectConnectionInfos",
                 null, _loginObject, true);
             if (tmp.Data == null || string.IsNullOrEmpty(tmp.Data.ToString()))
-                return new List<DeviceConnectionInfoObject>();
+                return new List<DeviceConnectionInfo>();
 
             var jobj = (JObject) tmp.Data;
-            var deviceConInfos = jobj.ToObject<DeviceConnectionInfoReturnObject>();
+            var deviceConInfos = jobj.ToObject<DeviceConnectionInfoResponse>();
 
             return deviceConInfos.Infos;
         }
