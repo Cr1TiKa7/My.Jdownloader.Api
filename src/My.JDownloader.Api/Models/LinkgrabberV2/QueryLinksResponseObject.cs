@@ -13,5 +13,7 @@
         public PriorityType Priority { get; set; }
         public string Url { get; set; }
         public long Id { get; set; }
+        public LinkVariantObject Variant { get; set; }
+        public bool Variants { get; set; }
     }
 }
