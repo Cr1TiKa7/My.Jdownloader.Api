@@ -64,11 +64,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An array which contains the ids of the dialogs.</returns>
         public long[] List()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device,
+            var response = ApiHandler.CallAction<DefaultResponse<long[]>>(Device,
                 "/dialogs/list", null, JDownloaderHandler.LoginObject);
 
-            var tmp = (JArray)response?.Data;
-            return tmp?.ToObject<long[]>();
+            return response?.Data;
         }
     }
 }

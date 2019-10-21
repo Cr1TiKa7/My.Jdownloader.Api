@@ -68,11 +68,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable which contains informations about all available captcha jobs.</returns>
         public IEnumerable<CaptchaJobResponse> List()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/captcha/list",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<CaptchaJobResponse>>>(Device, "/captcha/list",
                 null, JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray) response.Data);
 
-            return tmp?.ToObject<IEnumerable<CaptchaJobResponse>>();
+            return response?.Data;
         }
 
         /// <summary>

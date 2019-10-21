@@ -54,10 +54,10 @@ namespace My.JDownloader.Api.Namespaces
             var param = new[] { json };
 
             var response =
-                ApiHandler.CallAction<DefaultResponse<object>>(Device, "/downloadsV2/queryLinks", param,
+                ApiHandler.CallAction<DefaultResponse<IEnumerable<DownloadLinkResponse>>>(Device, "/downloadsV2/queryLinks", param,
                     JDownloaderHandler.LoginObject, true);
-            var tmp = (JArray)response?.Data;
-            return tmp?.ToObject<IEnumerable<DownloadLinkResponse>>();
+
+            return response?.Data;
         }
 
         /// <summary>
@@ -71,10 +71,9 @@ namespace My.JDownloader.Api.Namespaces
             var param = new[] { json };
 
             var response =
-                ApiHandler.CallAction<DefaultResponse<object>>(Device, "/downloadsV2/queryPackages", param,
+                ApiHandler.CallAction<DefaultResponse<IEnumerable<FilePackageResponse>>>(Device, "/downloadsV2/queryPackages", param,
                     JDownloaderHandler.LoginObject, true);
-            var tmp = (JArray)response?.Data;
-            return tmp?.ToObject<IEnumerable<FilePackageResponse>>();
+            return response?.Data;
         }
     }
 }

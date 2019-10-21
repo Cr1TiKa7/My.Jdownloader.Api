@@ -61,7 +61,7 @@ namespace My.JDownloader.Api.ApiHandler
         }
 
         public T CallAction<T>(Device device, string action, object param, LoginObject loginObject,
-            bool decryptResponse = false)
+            bool decryptResponse = false, bool deserialize = true)
         {
             if (device == null)
                 throw new ArgumentNullException(nameof(device));
@@ -97,11 +97,18 @@ namespace My.JDownloader.Api.ApiHandler
                 if (decryptResponse)
                 {
                     string tmp = Decrypt(response, loginObject.DeviceEncryptionToken);
-                    return (T) JsonConvert.DeserializeObject(tmp, typeof(T));
+                    if (deserialize)
+                        return (T) JsonConvert.DeserializeObject(tmp, typeof(T));
+                    return (T)Convert.ChangeType(response, typeof(T));
                 }
-                throw new InvalidRequestIdException("The 'RequestId' differs from the 'Requestid' from the queryRequest.");
             }
-            return (T) JsonConvert.DeserializeObject(response, typeof(T));
+            else
+                throw new InvalidRequestIdException("The 'RequestId' differs from the 'RequestId' from the queryRequest.");
+
+            if (deserialize)
+                return (T)JsonConvert.DeserializeObject(response, typeof(T));
+
+            return (T)Convert.ChangeType(response, typeof(T));
         }
 
         private string PostMethod(string url, string body = "", byte[] ivKey = null)

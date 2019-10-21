@@ -102,11 +102,10 @@ namespace My.JDownloader.Api.Namespaces
         {
             string json = JsonConvert.SerializeObject(request);
             var param = new[] {json};
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listAccounts", param,
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ListAccountResponse>>>(Device, "/accountsV2/listAccounts", param,
                 JDownloaderHandler.LoginObject, true);
-            JArray tmp = (JArray) response.Data;
 
-            return tmp.ToObject<IEnumerable<ListAccountResponse>>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -115,11 +114,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable with all basic authorization informations.</returns>
         public IEnumerable<ListBasicAuthResponse> ListBasicAuth()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listBasicAuth", null,
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ListBasicAuthResponse>>>(Device, "/accountsV2/listBasicAuth", null,
                 JDownloaderHandler.LoginObject, true);
-            JArray tmp = (JArray) response.Data;
 
-            return tmp.ToObject<IEnumerable<ListBasicAuthResponse>> ();
+            return response?.Data;
         }
 
         /// <summary>
@@ -128,10 +126,9 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable of all available premium hoster names.</returns>
         public IEnumerable<string> ListPremiumHoster()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listPremiumHoster", null,
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<string>>>(Device, "/accountsV2/listPremiumHoster", null,
                 JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray) response.Data);
-            return tmp?.ToObject<IEnumerable<string>>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -140,14 +137,11 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
         public Dictionary<string, string> ListPremiumHosterUrls()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accountsV2/listPremiumHosterUrls",
+            var response = ApiHandler.CallAction<DefaultResponse<Dictionary<string, string>>>(Device, "/accountsV2/listPremiumHosterUrls",
                 null,
                 JDownloaderHandler.LoginObject, true);
-            var tmp = ((JObject) response.Data);
-            if (tmp != null)
-                return tmp.ToObject<Dictionary<string, string>>();
 
-            return new Dictionary<string, string>();
+            return response?.Data;
         }
 
         /// <summary>

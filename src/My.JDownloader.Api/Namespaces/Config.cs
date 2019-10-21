@@ -55,11 +55,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable with all available config entries.</returns>
         public IEnumerable<AdvancedConfigApiEntryResponse> List()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/config/list",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<AdvancedConfigApiEntryResponse>>>(Device, "/config/list",
                 null, JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray)response.Data);
-
-            return tmp?.ToObject<IEnumerable<AdvancedConfigApiEntryResponse>>();
+         
+            return response?.Data;
         }
 
         /// <summary>
@@ -74,11 +73,10 @@ namespace My.JDownloader.Api.Namespaces
         public IEnumerable<AdvancedConfigApiEntryResponse> List(string pattern, bool returnDescription,bool returnValues, bool returnDefaultValues, bool returnEnumInfo)
         {
             var param = new object[] {pattern, returnDescription, returnValues, returnDefaultValues, returnEnumInfo};
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/config/list",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<AdvancedConfigApiEntryResponse>>>(Device, "/config/list",
                 param, JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray)response.Data);
-
-            return tmp?.ToObject<IEnumerable<AdvancedConfigApiEntryResponse>>();
+     
+            return response?.Data;
         }
 
         /// <summary>
@@ -89,11 +87,10 @@ namespace My.JDownloader.Api.Namespaces
         public IEnumerable<EnumOptionsResponse> ListEnum(string type)
         {
             var param = new [] { type };
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/config/listEnum",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<EnumOptionsResponse>>>(Device, "/config/listEnum",
                 param, JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray)response.Data);
 
-            return tmp?.ToObject<IEnumerable<EnumOptionsResponse>>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -104,11 +101,10 @@ namespace My.JDownloader.Api.Namespaces
         public IEnumerable<AdvancedConfigApiEntryResponse> Query(AdvancedConfigQueryRequest queryRequest)
         {
             var param = new[] {queryRequest};
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/config/queryRequest",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<AdvancedConfigApiEntryResponse>>>(Device, "/config/queryRequest",
                 null, JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray)response.Data);
-
-            return tmp?.ToObject<IEnumerable<AdvancedConfigApiEntryResponse>>();
+      
+            return response?.Data;
         }
 
         /// <summary>

@@ -70,12 +70,10 @@ namespace My.JDownloader.Api.Namespaces
         {
             string json = JsonConvert.SerializeObject(requestObject);
             var param = new[] { json };
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extensions/list",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ExtensionResponse>>>(Device, "/extensions/list",
                 param, JDownloaderHandler.LoginObject, true);
 
-            JArray tmp = (JArray)response.Data;
-
-            return tmp.ToObject<IEnumerable<ExtensionResponse>>();
+            return response?.Data;
         }
 
         /// <summary>

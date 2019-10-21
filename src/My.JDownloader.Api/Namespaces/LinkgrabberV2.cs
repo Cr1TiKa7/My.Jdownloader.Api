@@ -148,7 +148,7 @@ namespace My.JDownloader.Api.Namespaces
     public long GetChildrenChanged(long structureWatermark)
     {
         var response =
-            ApiHandler.CallAction<DefaultResponse<long>>(Device, "/linkgrabberv2/getChildrenChanged", null,
+            ApiHandler.CallAction<DefaultResponse<long>>(Device, "/linkgrabberv2/getChildrenChanged", structureWatermark,
                 JDownloaderHandler.LoginObject);
 
         if (response?.Data != null)
@@ -162,11 +162,10 @@ namespace My.JDownloader.Api.Namespaces
     /// <returns>An array which contains the download folder history.</returns>
     public string[] GetDownloadFolderHistorySelectionBase()
     {
-        var response = ApiHandler.CallAction<DefaultResponse<object>>(Device,
-            "/linkgrabberv2/getDownloadFolderHistorySelectionBase", null, JDownloaderHandler.LoginObject);
+        var response = ApiHandler.CallAction<DefaultResponse<string[]>>(Device,
+            "/linkgrabberv2/getDownloadFolderHistorySelectionBase", null, JDownloaderHandler.LoginObject,true);
 
-        var tmp = (JArray) response?.Data;
-        return tmp?.ToObject<string[]>();
+        return response?.Data;
     }
 
     // TODO: Describe what this function does.
@@ -179,12 +178,11 @@ namespace My.JDownloader.Api.Namespaces
     /// <returns></returns>
     public Dictionary<string, List<long>> GetDownloadUrls(long[] links, long afterLinkId, long destPackageId)
     {
-        var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/linkgrabberv2/getDownloadUrls", null,
+        var response = ApiHandler.CallAction<DefaultResponse<Dictionary<string, List<long>>>>(Device, "/linkgrabberv2/getDownloadUrls", null,
             JDownloaderHandler.LoginObject);
 
-        var tmp = (JObject) response?.Data;
-        return tmp?.ToObject<Dictionary<string, List<long>>>();
-    }
+        return response?.Data;
+        }
 
     /// <summary>
     /// Checks how many packages are inside the linkcollector.
@@ -208,11 +206,10 @@ namespace My.JDownloader.Api.Namespaces
     public IEnumerable<GetVariantsResponse> GetVariants(long linkId)
     {
         var response =
-            ApiHandler.CallAction<DefaultResponse<object>>(Device, "/linkgrabberv2/getVariants", null,
+            ApiHandler.CallAction<DefaultResponse<IEnumerable<GetVariantsResponse>>>(Device, "/linkgrabberv2/getVariants", null,
                 JDownloaderHandler.LoginObject);
 
-        var tmp = (JArray) response?.Data;
-        return tmp?.ToObject<IEnumerable<GetVariantsResponse>>();
+        return response?.Data;
     }
 
     /// <summary>
@@ -304,18 +301,18 @@ namespace My.JDownloader.Api.Namespaces
         return true;
     }
 
-        /// <summary>
+    /// <summary>
         /// Gets all links that are currently in the linkcollector.
         /// </summary>
         /// <param name="queryLinksRequest"></param>
         /// <returns>An enumerable of all links that are currently in the linkcollector list.</returns>
-        public IEnumerable<QueryLinksResponse> QueryLinks(QueryLinksRequest queryLinksRequest)
+    public IEnumerable<QueryLinksResponse> QueryLinks(QueryLinksRequest queryLinksRequest)
     {
         string json = JsonConvert.SerializeObject(queryLinksRequest);
         var param = new[] {json};
 
         var response =
-            ApiHandler.CallAction<CrawledLink>(Device, "/linkgrabberv2/queryLinks", param,
+            ApiHandler.CallAction<DefaultResponse<IEnumerable<QueryLinksResponse>>>(Device, "/linkgrabberv2/queryLinks", param,
                 JDownloaderHandler.LoginObject, true);
         return response?.Data;
     }
@@ -331,7 +328,7 @@ namespace My.JDownloader.Api.Namespaces
         var param = new[] {json};
 
         var response =
-            ApiHandler.CallAction<QueryPackages>(Device, "/linkgrabberv2/queryPackages", param,
+            ApiHandler.CallAction<DefaultResponse<IEnumerable<QueryPackagesResponse>>>(Device, "/linkgrabberv2/queryPackages", param,
                 JDownloaderHandler.LoginObject, true);
         return response?.Data;
     }

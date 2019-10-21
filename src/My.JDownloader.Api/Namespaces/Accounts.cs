@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using My.JDownloader.Api.ApiHandler;
 using My.JDownloader.Api.Models;
 using My.JDownloader.Api.Models.Accounts;
@@ -102,10 +104,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable of all available premium hoster names.</returns>
         public IEnumerable<string> ListPremiumHoster()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/listPremiumHoster", null,
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<string>>>(Device, "/accounts/listPremiumHoster", null,
                 JDownloaderHandler.LoginObject, true);
-            var tmp = ((JArray) response.Data);
-            return tmp?.ToObject<IEnumerable<string>>();
+
+            return response?.Data;
         }
 
         /// <summary>
@@ -114,26 +116,23 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
         public Dictionary<string, string> ListPremiumHosterUrls()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/listPremiumHosterUrls",
+            var response = ApiHandler.CallAction<DefaultResponse<Dictionary<string, string>>>(Device, "/accounts/listPremiumHosterUrls",
                 null,
                 JDownloaderHandler.LoginObject, true);
-            var tmp = ((JObject) response.Data);
-            if (tmp != null)
-                return tmp.ToObject<Dictionary<string, string>>();
 
-            return new Dictionary<string, string>();
+            return response?.Data;
         }
 
         /// <summary>
-        /// Gets all premium hoster names + urls that JDownloader supports.
+        /// Gets the icon of the given premium hoster.
         /// </summary>
-        /// <returns>Returns a dictionary containing the hostername as the key and the url as the value.</returns>
-        public object PremiumHosterIcon(string premiumHoster)
+        /// <returns>Returns an byte array which contains the hoster icon.</returns>
+        public string PremiumHosterIcon(string premiumHoster)
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/premiumHosterIcon",
+            var response = ApiHandler.CallAction<string>(Device, "/accounts/premiumHosterIcon",
                 new[] {premiumHoster},
-                JDownloaderHandler.LoginObject, true);
-          
+                JDownloaderHandler.LoginObject, false, false);
+
             return response;
         }
 
@@ -144,13 +143,11 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable which contains all accounts.</returns>
         public IEnumerable<Account> QueryAccounts(ApiQuery query)
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/accounts/queryAccounts",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<Account>>>(Device, "/accounts/queryAccounts",
                 null,
                 JDownloaderHandler.LoginObject, true);
 
-            JArray tmp = (JArray) response.Data;
-
-            return tmp.ToObject<IEnumerable<Account>>();
+            return response?.Data;
         }
 
         /// <summary>

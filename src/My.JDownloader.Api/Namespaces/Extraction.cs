@@ -54,11 +54,10 @@ namespace My.JDownloader.Api.Namespaces
         public IEnumerable<ArchiveStatusResponse> GetArchiveInfo(long[] linkIds, long[] packageIds)
         {
             var param = new[] { linkIds,packageIds };
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getArchiveInfo",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ArchiveStatusResponse>>>(Device, "/extraction/getArchiveInfo",
                 param, JDownloaderHandler.LoginObject, true);
 
-            JArray tmp = (JArray)response.Data;
-            return tmp.ToObject<IEnumerable<ArchiveStatusResponse>>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -69,11 +68,10 @@ namespace My.JDownloader.Api.Namespaces
         public IEnumerable<ArchiveSettingsResponse> GetArchiveSettings(string[] archiveIds)
         {
             var param = new[] { archiveIds };
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getArchiveSettings",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ArchiveSettingsResponse>>>(Device, "/extraction/getArchiveSettings",
                 param, JDownloaderHandler.LoginObject, true);
 
-            JArray tmp = (JArray)response.Data;
-            return tmp.ToObject<IEnumerable<ArchiveSettingsResponse>>();
+            return response?.Data;
         }
         
         /// <summary>
@@ -82,11 +80,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>An enumerable which contains all archive statuses of the queued archives.</returns>
         public IEnumerable<ArchiveStatusResponse> GetQueue()
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/getQueue",
+            var response = ApiHandler.CallAction<DefaultResponse<IEnumerable<ArchiveStatusResponse>>>(Device, "/extraction/getQueue",
                 null, JDownloaderHandler.LoginObject, true);
 
-            JArray tmp = (JArray)response.Data;
-            return tmp.ToObject<IEnumerable<ArchiveStatusResponse>>();
+            return response?.Data;
         }
 
         /// <summary>
@@ -112,14 +109,10 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>A dictionary which contains the archive id as the key and the extraction status as value.</returns>
         public Dictionary<string,bool?> StartExtractionNow(long[] linkIds, long[] packageIds)
         {
-            var response = ApiHandler.CallAction<DefaultResponse<object>>(Device, "/extraction/startExtractionNow",
+            var response = ApiHandler.CallAction<DefaultResponse<Dictionary<string, bool?>>>(Device, "/extraction/startExtractionNow",
                 null, JDownloaderHandler.LoginObject, true);
 
-            var tmp = ((JObject)response.Data);
-            if (tmp != null)
-                return tmp.ToObject<Dictionary<string, bool?>>();
-
-            return new Dictionary<string, bool?>();
+            return response?.Data;
         }
     }
 }
