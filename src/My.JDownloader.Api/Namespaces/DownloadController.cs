@@ -57,7 +57,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if successfull.</returns>
         public bool Start()
         {
-            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/stop", null, JDownloaderHandler.LoginObject, true);
+            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/start", null, JDownloaderHandler.LoginObject, true);
           
             return result?.Data != null && result.Data;
         }
@@ -68,7 +68,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns>True if successfull.</returns>
         public bool Stop()
         {
-            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/start", null, JDownloaderHandler.LoginObject, true);
+            var result = ApiHandler.CallAction<DefaultResponse<bool>>(Device, "/downloadcontroller/stop", null, JDownloaderHandler.LoginObject, true);
 
             return result?.Data != null && result.Data;
         }
