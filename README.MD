@@ -7,7 +7,7 @@ Currently it supports: .NET 4.0, .NET 4.5, .NET 4.6 and .NETCore 2.0
 
 > Feel free to request missing calls, bugs or suggestions for improvements.
 
-#### Usage
+## Usage
 
 First of all you need an instance of the JDownloaderHandler
 ``` c#
@@ -37,138 +37,48 @@ var device = devices[0];
 device.Jd.DoSomethingCool();
 ```
 
+## Changelog
+### __Version 2.4.3__
+Added:
+- OverridePackagizer Property to the AddLinkRequest class (Thanks to devocalypse)
+- SaveTo Property to the LinkQueryRequest class (Thanks to tprivaterep)  
+
+Fixed:
+- Wrong endpoint for LinkGrabberV2.IsCollecting (Thanks to devocalypse)
+
+
 #### Namespaces
 
 For a better overview, the calls are split into different namespaces.
 So far the library contains the following namespaces and methods:
 
 - Accounts | 11/12 calls done
-	- AddAccount(hoster, email, password) : boolean
-    - DisableAccounts(accountIds) : boolean
-    - EnableAccounts(accountIds) : boolean
-	- GetAccountInfo(accountId) : Account
-	- GetPremiumHosterUrl(hoster) : string
-	- ListPremiumHoster() : string[]
-    - ListPremiumHosterUrls() : Dictionary<string, string>
-	- QueryAccounts(apiQuery) : IEnumerable<Account>
-	- RemoveAccounts(accountIds) : boolean 
-	- SetEnabledStatus(enabled, accountIds) : boolean 
-	- UpdateAccount(accountId, username, password) : boolean
 	
 - AccountsV2 | 14/14 calls done
-    - AddAccount(hoster, email, password) : boolean
-	- AddBasicAuth(BasicAuthObject) : boolean
-    - DisableAccounts(accountIds) : boolean
-    - EnableAccounts(accountIds) : boolean
-	- GetPremiumHosterUrl(hoster) : string
-    - ListAccounts(ListAccountRequestObject) : IEnumerable<ListAccountResponseObject>
-	- ListBasicAuth() : IEnumerable<ListBasicAuthResponseObject>
-	- ListPremiumHoster() : string[]
-    - ListPremiumHosterUrls() : Dictionary<string, string>
-    - RefreshAccounts(accountIds) : boolean
-    - RemoveAccounts(accountIds) : boolean
-	- RemoveBasicAuths(basicAuthIds) : boolean
-    - SetUsernameAndPassword(accountId, email, password) : boolean
-	- UpdateBasicAuth(BasicAuthObject) : boolean
 	
 - Captcha | 7/7 calls done
-	- Get(id) : string
-	- Get(id, format) : string
-	- GetCaptchaJob(id) : CaptchaJob
-	- List() : IEnumerable<CaptchaJob>
-	- Skip(id, type) : bool
-	- Solve(id, result, resultFormat) : bool
-	- Solve(id, result) : bool
 	
 - CaptchaForward | 2/2 calls done
-	- CreateJobRecaptchaV2(one, two, three, four) : long
-	- GetResult(id) : string
 
 - Config | 8/8 calls done
-	- Get(interfaceName, storage, key) : object
-	- GetDefault(interfaceName, storage, key) : object
-	- List() : IEnumerable<AdvancedConfigApiEntry>
-	- List(pattern, returnDescription, returnValues, returnDefaultValues, returnEnumInfo) : IEnumerable<AdvancedConfigApiEntry>
-	- ListEnum(type) : IEnumerable<EnumOption>
-	- Query(query) : IEnumerable<AdvancedConfigApiEntry>
-	- Reset(interfaceName, storage, key) : boolean
-	- Set(interfaceName, storage, key) : boolean
 
 - DownloadController | 6/6 calls done
-	- ForceDownload(linkIds[], packageIds[]) : boolean
-    - Start() : boolean
-    - Stop() : boolean
-    - Pause(pause) : boolean
-    - GetCurrentState() : string
-	- GetSpeedInBps() : long
 
 - DownloadsV2 | 4/26 calls done
-	- GetStopMark() : long
-	- GetStopMarkedLink() : StopMarkedLinkReturnObject
-	- QueryLinks(linkQuery) : IEnumerable<DownloadLinkObject>
-	- QueryPackages(linkQuery) : IEnumerable<FilePackageObject>
 
 - Extensions | 5/5 calls done
-	- Install(extensionId) : boolean
-	- IsEnabled(className) : boolean
-	- IsInstalled(extensionId) : boolean
-	- List(ExtensionRequestObject) : IEnumerable<ExtensionResponseObject>
-	- SetEnabled(className, enabled) : boolean
 
 - Extraction | 7/7 calls done
-	- AddArchivePassword(password) : boolean
-	- CancelExtraction(controllerId) : boolean
-	- GetArchiveInfo(linkIds, packageIds) : IEnumerable<ArchiveStatus>
-	- GetArchiveSettings(archiveIds) : IEnumerable<ArchiveSettings>
-	- GetQueue() : IEnumerable<ArchiveStatus>
-	- SetArchiveSettings(archiveId, archiveSettings) : boolean
-	- StartExtractionNow(linkIds, packageIds) : Dictionary<string, boolean?>
 
 - JD | 6/6 calls done
-	- DoSomethingCool()
-	- GetCoreRevision() : int
-	- RefreshPlugins() : boolean
-	- Sum() : int
-	- Uptime() : long
-	- Version() : long
 	
 - LinkCrawler | 1/1 calls done
-    - IsCrawling() : boolean
     
 - LinkGrabberV2 | 19/30 calls done
-	- Abort() : boolean
-	- Abort(jobId) : boolean
-    - AddLinks(AddLinkRequestObject) : boolean
-    - AddContainer(containerType, content) : boolean
-    - ClearList() : boolean
-	- CleanUp(linkIds, packageIds, action, mode, selection) : boolean
-	- GetChildrenChanged(structureWatermark) : long
-	- GetDownloadFolderHistorySelectionBase() : string[]
-	- GetDownloadUrls(linkIds, afterLinkId, destPackageId) : Dictionary<string, List<long>>
-    - GetPackageCount() : int
-	- GetVariants(linkId) : IEnumerable<GetVariantsReturnObject>
-    - IsCollecting() : boolean
-	- MoveLinks(linkIds, afterLinkId, destPackageId) : boolean
-	- MovePackages(packageIds, afterDestPackageId) : boolean
-	- MoveToDownloadList(linkIds, packageIds) : boolean
-	- MoveToNewPackage(linkIds, packageIds, newPackageName, downloadPath) : boolean
-    - QueryLinks(maxResults) : IEnumerable<QueryLinksResponseObject>
-	- QueryPackages(QueryPackagesRequestObject) : IEnumerable<QueryPackagesResponseObject>
-	- SetDownloadDirectory(directory, packageIds[]) : boolean
 	
 - System | 7/7 calls done
-    - ExitJd()
-	- GetStorageInfos(path) : StorageInfoReturnObject[]
-	- GetSystemInfos() : SystemInfoReturnObject
-	- HibernateOS()
-	- RestartJd()
-	- ShutdownOS()
-	- StandbyOS()
 
 - Update | 3/3 calls done
-	- IsUpdateAvailable() : boolean
-	- RestartAndUpdate()
-	- RunUpdateCheck()
 
 #### Samples
 

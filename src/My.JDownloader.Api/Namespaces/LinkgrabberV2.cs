@@ -219,7 +219,7 @@ namespace My.JDownloader.Api.Namespaces
     public bool IsCollecting()
     {
         var response =
-            ApiHandler.CallAction<object>(Device, "/linkgrabberv2/isCollection", null,
+            ApiHandler.CallAction<object>(Device, "/linkgrabberv2/isCollecting", null,
                 JDownloaderHandler.LoginObject);
         if (response == null)
             return false;

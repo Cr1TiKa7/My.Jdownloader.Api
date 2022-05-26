@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net40;net46;net45;netcoreapp20</TargetFrameworks>
+    <TargetFrameworks>net46;netcoreapp20</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Cr1TiKa7</Authors>
     <Product />
     <Description>A simple My.JDownloader Api wrapper for c# written by Cr1TiKa7</Description>
-    <Copyright>Cr1TiKa7 ©2018 - 2019</Copyright>
+    <Copyright>Cr1TiKa7 ©2018 - 2022</Copyright>
     <PackageLicenseUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Cr1TiKa7/My.Jdownloader.Api</RepositoryUrl>
-    <Version>2.4.2</Version>
-    <PackageReleaseNotes>- Fixed Issue #3 (QueryLinks of the LinkgrabberV2 endpoints  returns nothing if no parameter was set.)</PackageReleaseNotes>
+    <Version>2.4.3</Version>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl>https://i.imgur.com/sJWbszc.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>

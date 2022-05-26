@@ -20,5 +20,9 @@ namespace My.JDownloader.Api.Models.LinkgrabberV2.Request
         public string DownloadPassword { get; set; }
         [JsonProperty(PropertyName = "extractPassword")]
         public string ExtractPassword { get; set; }
+
+        // Thanks to devocalypse
+        [JsonProperty(PropertyName = "overwritePackagizerRules")] 
+        public bool OverridePackagizer { get; } = true;
     }
 }

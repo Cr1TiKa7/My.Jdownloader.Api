@@ -55,7 +55,8 @@
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "speed")]
         public bool Speed { get; set; } = true;
-
+        [Newtonsoft.Json.JsonProperty(PropertyName = "saveTo")]
+        public bool SaveTo { get; set; } = true;
         [Newtonsoft.Json.JsonProperty(PropertyName = "startAt")]
         public int StartAt { get; set; } 
 
