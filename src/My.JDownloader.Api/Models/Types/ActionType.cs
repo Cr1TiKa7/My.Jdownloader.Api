@@ -1,6 +1,6 @@
-﻿namespace My.JDownloader.Api.Models.LinkgrabberV2.Types
+﻿namespace My.JDownloader.Api.Models.Types
 {
-    public enum CleanUpActionType
+    public enum ActionType
     {
         DELETE_ALL,
         DELETE_DISABLED,

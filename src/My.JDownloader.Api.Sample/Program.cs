@@ -1,4 +1,5 @@
 ﻿using My.JDownloader.Api.Models.Devices;
+using My.JDownloader.Api.Models.Types;
 
 namespace My.JDownloader.Api.Sample
 {
@@ -6,7 +7,7 @@ namespace My.JDownloader.Api.Sample
     {
         static void Main(string[] args)
         {
-            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("YOURMEAIL", "YOURPASSWORD", "test");
+            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("thetrust3343@yahoo.de", "Cocacola123!", "test");
             //jdownloaderHandler.Connect("YOURMEAIL", "YOURPASSWORD");
             if (jdownloaderHandler.IsConnected)
             {
@@ -17,9 +18,12 @@ namespace My.JDownloader.Api.Sample
                 foreach (My.JDownloader.Api.Models.Devices.Device device in devices)
                 {
                     var dHandler = jdownloaderHandler.GetDeviceHandler(device);
-                    var tmp = dHandler.DownloadsV2.QueryPackages(new Models.DownloadsV2.Request.LinkQueryRequest());
+                    var tmp = dHandler.LinkgrabberV2.QueryPackages(new Models.LinkgrabberV2.Request.QueryPackagesRequest());
 
-                    var tmp2 = dHandler.DownloadController.GetSpeedInBps();
+                    foreach (var link in tmp)
+                    {
+                        dHandler.DownloadsV2.SetComment(null, new[] { link.UUID }, true, "This is a test"); 
+                    }
                 }
             }
         }

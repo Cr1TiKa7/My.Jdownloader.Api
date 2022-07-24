@@ -38,6 +38,14 @@ device.Jd.DoSomethingCool();
 ```
 
 ## Changelog
+
+### __Version 2.4.5__
+Added:
+- setComment call to the DownloadsV2 and LinkgrabberV2 namespace (Thanks to jeffward01)
+
+Fixed:
+- Cleanup endpoint
+
 ### __Version 2.4.3__
 Added:
 - OverridePackagizer Property to the AddLinkRequest class (Thanks to devocalypse)

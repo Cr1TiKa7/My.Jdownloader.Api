@@ -113,14 +113,6 @@ namespace My.JDownloader.Api.ApiHandler
 
         private string PostMethod(string url, string body = "", byte[] ivKey = null)
         {
-            //url = url.Replace("172.23.0.8", "89.163.144.231");
-            //Regex _regex = new Regex("http\\:\\/\\/(192.168.*)\\:37733");
-            //var match = _regex.Match(url);
-            //if (match.Success)
-            //{
-            //    url = url.Replace(match.Groups[0].Value, "89.163.144.231");
-            //}
-            //url = url.Replace("192.168.128.2", "89.163.144.231");
             try
             {
                 using (var httpClient = new HttpClient())

@@ -1,6 +1,6 @@
-﻿namespace My.JDownloader.Api.Models.LinkgrabberV2.Types
+﻿namespace My.JDownloader.Api.Models.Types
 {
-    public enum CleanUpModeType
+    public enum ModeType
     {
         REMOVE_LINKS_AND_DELETE_FILES,
         REMOVE_LINKS_AND_RECYCLE_FILES,

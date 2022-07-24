@@ -5,6 +5,7 @@ using My.JDownloader.Api.Models.Devices;
 using My.JDownloader.Api.Models.DownloadsV2;
 using My.JDownloader.Api.Models.DownloadsV2.Request;
 using My.JDownloader.Api.Models.DownloadsV2.Response;
+using My.JDownloader.Api.Models.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,29 +20,67 @@ namespace My.JDownloader.Api.Namespaces
             Device = device;
         }
 
+
         /// <summary>
-        /// Gets the stop mark as long.
+        /// Cleans up the downloader list.
         /// </summary>
-        /// <returns>The stop mark as long.</returns>
-        public long GetStopMark()
+        /// <param name="linkIds">Ids of the link you may want to clear.</param>
+        /// <param name="packageIds">Ids of the packages you may want to clear.</param>
+        /// <param name="action">The action type.</param>
+        /// <param name="mode">The mode type.</param>
+        /// <param name="selection">The selection Type.</param>
+        /// <returns>True if successful.</returns>
+        public bool CleanUp(long[] linkIds, long[] packageIds, ActionType action, ModeType mode,
+            SelectionType selection)
         {
-            var response = ApiHandler.CallAction<DefaultResponse<long>>(Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
-         
-            if (response?.Data != null)
-                return response.Data;
-            return -1;
+            var param = new object[] { linkIds, packageIds, action, mode, selection };
+            var response =
+                ApiHandler.CallAction<object>(Device, "/downloadsV2/cleanUp", param,
+                    JDownloaderHandler.LoginObject);
+
+            if (response == null)
+                return false;
+
+            return true;
         }
 
         /// <summary>
-        /// Gets informations about a stop marked link.
+        /// Forcing the download on specific links/packages.
         /// </summary>
-        /// <returns>Returns informations about a stop marked link.</returns>
-        public StopMarkedLinkResponse GetStopMarkedLink()
+        /// <param name="linkIds">Ids of the link you may want to force the download.</param>
+        /// <param name="packageIds">Ids of the packages you may want to force the download.</param>
+        /// <returns></returns>
+        public bool ForceDownload(long[] linkIds, long[] packageIds)
         {
-            var response = ApiHandler.CallAction<DefaultResponse<StopMarkedLinkResponse>>(Device, "/linkgrabberv2/getStopMark", null, JDownloaderHandler.LoginObject);
+            var param = new object[] { linkIds, packageIds };
+            var response =
+                ApiHandler.CallAction<object>(Device, "/downloadsV2/forceDownload", param,
+                    JDownloaderHandler.LoginObject, true);
+
+            if (response == null)
+                return false;
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Gets the 'download url' of the given links/packages.
+        /// </summary>
+        /// <param name="linkIds">Ids of the link you may want to force the download.</param>
+        /// <param name="packageIds">Ids of the packages you may want to force the download.</param>
+        /// <param name="urlDisplayType"></param>
+        /// <returns></returns>
+        public Dictionary<string, long[]> GetDownloadUrls(long[] linkIds, long[] packageIds, UrlDisplayType[] urlDisplayType)
+        {
+            var param = new object[] { linkIds, packageIds, urlDisplayType };
+            var response =
+                ApiHandler.CallAction<DefaultResponse<Dictionary<string, long[]>>>(Device, "/downloadsV2/getDownloadUrls", param,
+                    JDownloaderHandler.LoginObject, true);
 
             return response?.Data;
         }
+
 
         /// <summary>
         /// Gets all entires that are currently in the download list.
@@ -72,6 +111,23 @@ namespace My.JDownloader.Api.Namespaces
 
             var response =
                 ApiHandler.CallAction<DefaultResponse<IEnumerable<FilePackageResponse>>>(Device, "/downloadsV2/queryPackages", param,
+                    JDownloaderHandler.LoginObject, true);
+            return response?.Data;
+        }
+
+        /// <summary>
+        /// Sets the comment for the given links/packages within the downloads tab
+        /// </summary>
+        /// <param name="linkIds">Array of link ids</param>
+        /// <param name="packageIds">Array of package ids</param>
+        /// <param name="setPackageChildren">True if also the links within the given packages should get the comment set</param>
+        /// <param name="comment">The comment</param>
+        /// <returns>Nothing for now since it's undocumented.</returns>
+        public object SetComment(long[] linkIds, long[] packageIds, bool setPackageChildren, string comment)
+        {
+            var param = new object[] { linkIds, packageIds, setPackageChildren, comment };
+            var response =
+                ApiHandler.CallAction<DefaultResponse<object>>(Device, "/downloadsV2/setComment", param,
                     JDownloaderHandler.LoginObject, true);
             return response?.Data;
         }

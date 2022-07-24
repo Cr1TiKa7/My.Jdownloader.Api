@@ -1,6 +1,6 @@
 ﻿using My.JDownloader.Api.Models.LinkgrabberV2.Types;
 
-namespace My.JDownloader.Api.Models.DownloadsV2.Response
+namespace My.JDownloader.Api.Models.LinkgrabberV2.Response
 {
     public class StopMarkedLinkResponse
     {
@@ -14,7 +14,7 @@ namespace My.JDownloader.Api.Models.DownloadsV2.Response
         public string ExtractionStatus { get; set; }
         public bool Finished { get; set; }
         public long FinishedDate { get; set; }
-        public string Host{ get; set; }
+        public string Host { get; set; }
         public string Name { get; set; }
         public long PackageUuid { get; set; }
         public PriorityType Priority { get; set; }

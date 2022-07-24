@@ -17,6 +17,6 @@ namespace My.JDownloader.Api.Models.LinkgrabberV2.Response
         public string SaveTo { get; set; }
         public int TempUnknownCount { get; set; }
         public int UnkownCount { get; set; }
-        public long Uuid { get; set; }
+        public long UUID { get; set; }
     }
 }
