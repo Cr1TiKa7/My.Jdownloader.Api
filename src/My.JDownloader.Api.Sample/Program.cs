@@ -7,7 +7,7 @@ namespace My.JDownloader.Api.Sample
     {
         static void Main(string[] args)
         {
-            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("thetrust3343@yahoo.de", "Cocacola123!", "test");
+            JDownloaderHandler jdownloaderHandler = new JDownloaderHandler("USERNAME", "PASSWORD", "APPNAME");
             //jdownloaderHandler.Connect("YOURMEAIL", "YOURPASSWORD");
             if (jdownloaderHandler.IsConnected)
             {
@@ -15,6 +15,8 @@ namespace My.JDownloader.Api.Sample
                 //Linq version
                 //devices.ForEach(x => jdownloaderHandler.GetDeviceHandler(x).AccountsV2.AddAccount("mega.co.nz", "YOURMEAIL", "YOURPASSWORD"));
                 //Normal version
+
+                jdownloaderHandler.Reconnect();
                 foreach (My.JDownloader.Api.Models.Devices.Device device in devices)
                 {
                     var dHandler = jdownloaderHandler.GetDeviceHandler(device);
