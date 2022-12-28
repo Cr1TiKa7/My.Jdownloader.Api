@@ -35,7 +35,7 @@ namespace My.JDownloader.Api.Namespaces
         {
             var param = new object[] { linkIds, packageIds, action, mode, selection };
             var response =
-                ApiHandler.CallAction<object>(Device, "/downloadsV2/cleanUp", param,
+                ApiHandler.CallAction<object>(Device, "/downloadsV2/cleanup", param,
                     JDownloaderHandler.LoginObject);
 
             if (response == null)

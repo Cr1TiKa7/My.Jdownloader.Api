@@ -92,7 +92,7 @@ namespace My.JDownloader.Api.ApiHandler
             string response = PostMethod(url,
                 json, loginObject.DeviceEncryptionToken);
 
-            if (response != null || !response.Contains(callAction.RequestId.ToString()))
+            if (response != null && !response.Contains(callAction.RequestId.ToString()))
             {
                 if (decryptResponse)
                 {
