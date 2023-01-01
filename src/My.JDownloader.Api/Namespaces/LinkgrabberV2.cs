@@ -115,7 +115,7 @@ namespace My.JDownloader.Api.Namespaces
         public bool CleanUp(long[] linkIds, long[] packageIds, ActionType action, ModeType mode,
             SelectionType selection)
         {
-            var param = new object[] {linkIds, packageIds, action, mode, selection};
+            var param = new object[] {linkIds, packageIds, action.ToString(), mode.ToString(), selection.ToString()};
             var response =
                 ApiHandler.CallAction<object>(Device, "/linkgrabberv2/cleanup", param,
                     JDownloaderHandler.LoginObject);

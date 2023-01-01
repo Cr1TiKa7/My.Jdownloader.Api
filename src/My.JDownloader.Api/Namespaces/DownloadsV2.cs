@@ -33,9 +33,9 @@ namespace My.JDownloader.Api.Namespaces
         public bool CleanUp(long[] linkIds, long[] packageIds, ActionType action, ModeType mode,
             SelectionType selection)
         {
-            var param = new object[] { linkIds, packageIds, action, mode, selection };
+            var param = new object[] { linkIds, packageIds, action.ToString(), mode.ToString(), selection.ToString() };
             var response =
-                ApiHandler.CallAction<object>(Device, "/downloadsV2/cleanUp", param,
+                ApiHandler.CallAction<object>(Device, "/downloadsV2/cleanup", param,
                     JDownloaderHandler.LoginObject);
 
             if (response == null)
@@ -73,7 +73,7 @@ namespace My.JDownloader.Api.Namespaces
         /// <returns></returns>
         public Dictionary<string, long[]> GetDownloadUrls(long[] linkIds, long[] packageIds, UrlDisplayType[] urlDisplayType)
         {
-            var param = new object[] { linkIds, packageIds, urlDisplayType };
+            var param = new object[] { linkIds, packageIds, urlDisplayType.ToString() };
             var response =
                 ApiHandler.CallAction<DefaultResponse<Dictionary<string, long[]>>>(Device, "/downloadsV2/getDownloadUrls", param,
                     JDownloaderHandler.LoginObject, true);
