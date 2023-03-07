@@ -300,7 +300,7 @@ namespace My.JDownloader.Api.Namespaces
 
             var response =
                 ApiHandler.CallAction<object>(Device, "/linkgrabberv2/moveToDownloadlist", param,
-                    JDownloaderHandler.LoginObject);
+                    JDownloaderHandler.LoginObject, true);
             if (response == null)
                 return false;
             return true;
