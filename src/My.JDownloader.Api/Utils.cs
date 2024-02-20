@@ -17,11 +17,11 @@ namespace My.JDownloader.Api
             return EncodeStringToSha256(email.ToLower() + password + domain);
         }
 
-        internal static readonly SHA256Managed _sha256Managed = new SHA256Managed();
+		internal static readonly SHA256 _sha256 = SHA256.Create();
 
-        internal static byte[] EncodeStringToSha256(string text)
+		internal static byte[] EncodeStringToSha256(string text)
         {
-            return _sha256Managed.ComputeHash(Encoding.UTF8.GetBytes(text));
+            return _sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
         }
 
         internal static byte[] UpdateEncryptionToken(byte[] oldToken, string updateToken)
@@ -30,8 +30,8 @@ namespace My.JDownloader.Api
             var newHash = new byte[oldToken.Length + newToken.Length];
             oldToken.CopyTo(newHash, 0);
             newToken.CopyTo(newHash, 32);
-            var hashString = new SHA256Managed();
-            hashString.ComputeHash(newHash);
+            var hashString = SHA256.Create();
+			hashString.ComputeHash(newHash);
             return hashString.Hash;
         }
 
