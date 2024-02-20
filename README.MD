@@ -3,7 +3,7 @@
 This is an simple wrapper for the official My.JDownloader.Api written in c#.
 It's an rewritten and extended version of https://github.com/noone2407/MyJDownloaderApi.
 
-Currently it supports: .NET 4.0, .NET 4.5, .NET 4.6 and .NETCore 2.0
+Currently it supports: .NET 8
 
 > Feel free to request missing calls, bugs or suggestions for improvements.
 
